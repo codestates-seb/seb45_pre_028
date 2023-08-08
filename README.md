@@ -7,8 +7,8 @@
 
 | 이마루한(FE) | 박진주(FE) | 김남구(FE) | 최승현(FE) | 민은영(BE) | 김소연(BE) | 손우진(BE) |
 | :----------: | :--------------------------------------------------------------------------------------------------: | :--------: | :--------: | :--------: | :--------: | :--------: |
-| <img src="" width="50px"> | <img src="http://drive.google.com/uc?export=view&id=1WT_EC-LQhFNLTNtNUAMJ0iORwnOcwy75" width="50px"> | <img src="" width="50px"> | <img src="" width="50px"> | <img src="" width="50px"> | <img src="" width="50px"> | <img src="" width="50px"> |
-|  [깃헙id]()  | [pearl-sea](https://github.com/pearl-sea) | [깃헙id]() | [깃헙id]() | [깃헙id]() | [깃헙id]() | [깃헙id]() |
+| <img src="https://codeit-images.s3.ap-northeast-2.amazonaws.com/images/631fe801a470e661c7810b5a/IMG_1357.jpg_k2RPEh" width="50px"> | <img src="http://drive.google.com/uc?export=view&id=1WT_EC-LQhFNLTNtNUAMJ0iORwnOcwy75" width="50px"> | <img src="" width="50px"> | <img src="" width="50px"> | <img src="" width="50px"> | <img src="" width="50px"> | <img src="" width="50px"> |
+|  [ddussi](https://github.com/ddussi)  | [pearl-sea](https://github.com/pearl-sea) | [깃헙id]() | [깃헙id]() | [깃헙id]() | [깃헙id]() | [깃헙id]() |
 
 ### Stacks
 
