@@ -7,6 +7,9 @@ export const COMMON_CSS: CommonCss = {
   "border-color": "#d6d9dc",
   "font-color-black": "#3b4045",
   "font-color-gray": "#525960",
+  "icon-color-black": "#0c0d0e",
+  "icon-color-lightgray": "#838c95",
+  "nav-background-color": "#f1f2f3",
   "button-color": "#0a95ff",
   "button-hover-color": "#0074cc",
 };
