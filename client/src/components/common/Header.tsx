@@ -1,14 +1,14 @@
-import React from "react";
-import { styled } from "styled-components";
 import { useForm } from "react-hook-form";
+import { styled } from "styled-components";
 
 const HeaderContainer = styled.div`
   position: sticky;
   border-bottom: 1px solid #d6d9dc;
-  div {
+  & > div {
     display: flex;
     align-items: center;
-    max-width: 100%;
+    justify-content: space-between;
+    max-width: 79rem;
     margin: 0 auto;
   }
 `;
@@ -45,6 +45,7 @@ const Select = styled.div`
 const Search = styled.form`
   display: flex;
   align-items: center;
+  flex-grow: 1;
 
   input {
     outline: none;
