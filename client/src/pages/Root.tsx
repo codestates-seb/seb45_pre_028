@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import ContentSection from "../components/common/ContentSection";
+import Footer from "../components/common/Footer";
 import Header from "../components/common/Header";
 import Sidebar from "../components/common/Sidebar";
 
@@ -23,6 +24,7 @@ const Root = (): JSX.Element => {
           <Outlet />
         </ContentSection>
       </StyledContainer>
+      <Footer />
     </>
   );
 };

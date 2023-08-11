@@ -2,14 +2,20 @@ import { useForm } from "react-hook-form";
 import { styled } from "styled-components";
 
 const HeaderContainer = styled.div`
+  background: #fff;
+  border-top: 3px solid #f48225;
   position: sticky;
+  top: 0;
+  z-index: 1;
   border-bottom: 1px solid #d6d9dc;
+
   & > div {
     display: flex;
     align-items: center;
     justify-content: space-between;
     max-width: 79rem;
     margin: 0 auto;
+    padding: 0.625rem 0.75rem;
   }
 `;
 
@@ -19,7 +25,10 @@ const Nav = styled.div`
   justify-content: center;
 
   img {
+    padding: 0 0.5rem 0 0;
     width: 9.375rem;
+    height: 1.875rem;
+    object-fit: cover;
   }
 `;
 
@@ -28,8 +37,8 @@ const Select = styled.div`
   align-items: center;
 
   div {
+    display: flex;
     margin: 0rem 0.625rem;
-    padding: 0.625rem;
     border-radius: 20px;
     &:hover {
       cursor: pointer;
@@ -52,7 +61,7 @@ const Search = styled.form`
     outline: none;
     padding: 0.5rem;
     padding-left: 1.5625rem;
-    margin-right: 0.3125rem;
+    margin: 0 0.3125rem;
     border: 1px solid #8a8c8d;
     border-radius: 5px;
     width: 100%;
@@ -62,7 +71,7 @@ const Search = styled.form`
   }
   svg {
     position: absolute;
-    left: 0.3125rem;
+    left: 0.625rem;
     opacity: 0.5;
   }
 `;
@@ -128,11 +137,7 @@ const Header = (): JSX.Element => {
           </Select>
         </Nav>
         <Search onSubmit={submitSearch}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="1em"
-            viewBox="0 0 512 512"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
             <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
           </svg>
           <input {...register("search")} placeholder="Search..."></input>
