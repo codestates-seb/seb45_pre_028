@@ -3,7 +3,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import Main from "./pages/Main";
 import Questions from "./pages/Questions";
-import Login from "./pages/Login";
 
 import RootLayout from "./pages/Root";
 
@@ -22,10 +21,6 @@ function App() {
           element: <Questions />,
         },
       ],
-    },
-    {
-      path: "/login",
-      element: <Login />,
     },
   ];
 
