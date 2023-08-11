@@ -18,7 +18,7 @@ const QuestionListTitle = () => {
       font-size: 0.8125rem;
       background: ${COMMON_CSS["button-color"]};
       color: #fff;
-      padding: 0.625rem;
+      padding: 0.8rem;
       border-radius: 6px;
 
       &:hover {

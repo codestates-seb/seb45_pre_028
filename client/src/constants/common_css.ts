@@ -6,7 +6,7 @@ export const COMMON_CSS: CommonCss = {
   "main-color": "#f48225",
   "border-color": "#d6d9dc",
   "font-color-black": "#3b4045",
-  "font-color-gray": "#525960",
+  "font-color-gray": "#6a737c",
   "icon-color-black": "#0c0d0e",
   "icon-color-lightgray": "#838c95",
   "nav-background-color": "#f1f2f3",

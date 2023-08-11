@@ -12,6 +12,7 @@ const StyledSidebar = styled.aside`
   z-index: 0;
 
   p {
+    color: ${COMMON_CSS["font-color-gray"]};
     font-size: 0.6875rem;
     margin: 0.25rem 0 0.25rem 0.5rem;
   }
