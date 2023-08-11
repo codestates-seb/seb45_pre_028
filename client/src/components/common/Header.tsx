@@ -4,14 +4,20 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router";
 
 const HeaderContainer = styled.div`
+  background: #fff;
+  border-top: 3px solid #f48225;
   position: sticky;
+  top: 0;
+  z-index: 1;
   border-bottom: 1px solid #d6d9dc;
+
   & > div {
     display: flex;
     align-items: center;
     justify-content: space-between;
     max-width: 79rem;
     margin: 0 auto;
+    padding: 0.625rem 0.75rem;
   }
 `;
 
@@ -21,8 +27,10 @@ const Nav = styled.div`
   justify-content: center;
 
   img {
+    padding: 0 0.5rem 0 0;
     width: 9.375rem;
-    cursor: pointer;
+    height: 1.875rem;
+    object-fit: cover;
   }
 `;
 
@@ -31,8 +39,8 @@ const Select = styled.div`
   align-items: center;
 
   div {
+    display: flex;
     margin: 0rem 0.625rem;
-    padding: 0.625rem;
     border-radius: 20px;
     &:hover {
       cursor: pointer;
@@ -55,7 +63,7 @@ const Search = styled.form`
     outline: none;
     padding: 0.5rem;
     padding-left: 1.5625rem;
-    margin-right: 0.3125rem;
+    margin: 0 0.3125rem;
     border: 1px solid #8a8c8d;
     border-radius: 5px;
     width: 100%;
@@ -65,7 +73,7 @@ const Search = styled.form`
   }
   svg {
     position: absolute;
-    left: 0.3125rem;
+    left: 0.625rem;
     opacity: 0.5;
   }
 `;
