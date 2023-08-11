@@ -19,7 +19,7 @@ const Nav = styled.div`
   justify-content: center;
 
   img {
-    width: 150px;
+    width: 9.375rem;
   }
 `;
 
@@ -28,8 +28,8 @@ const Select = styled.div`
   align-items: center;
 
   div {
-    margin-left: 30px;
-    padding: 10px;
+    margin: 0rem 0.625rem;
+    padding: 0.625rem;
     border-radius: 20px;
     &:hover {
       cursor: pointer;
@@ -37,7 +37,7 @@ const Select = styled.div`
     }
     span {
       opacity: 0.6;
-      font-size: 12px;
+      font-size: 0.75rem;
     }
   }
 `;
@@ -46,10 +46,24 @@ const Search = styled.form`
   display: flex;
   align-items: center;
   flex-grow: 1;
+  position: relative;
 
   input {
     outline: none;
+    padding: 0.5rem;
+    padding-left: 1.5625rem;
+    margin-right: 0.3125rem;
+    border: 1px solid #8a8c8d;
+    border-radius: 5px;
     width: 100%;
+    &:focus {
+      box-shadow: 0px 0px 6px rgba(0, 0, 255, 0.3);
+    }
+  }
+  svg {
+    position: absolute;
+    left: 0.3125rem;
+    opacity: 0.5;
   }
 `;
 
@@ -59,13 +73,13 @@ const Login = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 65px;
-    height: 35px;
+    width: 4.0625rem;
+    height: 2.1875rem;
     border-radius: 5px;
-    margin: 0px 2px;
+    margin: 0rem 0.125rem;
 
     span {
-      font-size: 13px;
+      font-size: 0.8125rem;
     }
   }
 
@@ -89,7 +103,6 @@ const Login = styled.div`
 
 const Header = (): JSX.Element => {
   const { register, watch } = useForm();
-
   const submitSearch = () => {
     console.log(watch());
   };
@@ -115,6 +128,13 @@ const Header = (): JSX.Element => {
           </Select>
         </Nav>
         <Search onSubmit={submitSearch}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="1em"
+            viewBox="0 0 512 512"
+          >
+            <path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z" />
+          </svg>
           <input {...register("search")} placeholder="Search..."></input>
         </Search>
         <Login>
