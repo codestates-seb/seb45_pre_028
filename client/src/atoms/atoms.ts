@@ -10,7 +10,7 @@ export const questionsState = atom<Question[]>({
 export const readData = selector<Array<Question>>({
   key: "readData",
   get: async () => {
-    const response = await axios.get("http://localhost:3001/questions");
+    const response = await axios.get("http://localhost:3001/question");
     return response.data;
   },
 });
