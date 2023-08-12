@@ -11,12 +11,14 @@ const AnswerContainer = styled.div`
   margin: 0 1rem;
   h2 {
     font-weight: 400;
+    margin-bottom: 0.5rem;
   }
   .answer_user {
+    margin-top: 0.625rem;
     float: right;
   }
   .time {
-    margin: 0.625rem 0;
+    margin: 0.0625rem 0 0.25rem 0;
     font-weight: 300;
     font-size: 0.75rem;
   }
@@ -51,7 +53,7 @@ function AnswerList() {
         {data &&
           data.map((x: Answer) => (
             <div key={x.answer_id}>
-              <div>Content: {x.content}</div>
+              <div>{x.content}</div>
               <div className="answer_user">
                 <div className="time">answered {x.createdAt.slice(2, -3)}</div>
                 <div className="answer_id">{x.member_id}</div>
