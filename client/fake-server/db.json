@@ -12,11 +12,10 @@
   "answer": [
     {
       "answer_id": 1,
-      "title": "답변입니다.",
       "createdAt": "2023-08-10 18:09:30",
       "modifiedAt": "2023-08-10 18:09:35",
       "member_id": 2,
-      "question_id": "답변 내용입니다."
+      "content": "답변 내용입니다."
     }
   ]
 }

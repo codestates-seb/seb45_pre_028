@@ -9,9 +9,8 @@ export interface Question {
 
 export interface Answer {
   answer_id: number;
-  title: string;
   createdAt: string;
   modifiedAt: string;
   member_id: number;
-  question_id: string;
+  content: string;
 }

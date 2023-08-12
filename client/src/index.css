@@ -56,7 +56,9 @@ input,
 select {
   margin: 0;
 }
-
+button{
+  cursor: pointer;
+}
 html {
   box-sizing: border-box;
 }
