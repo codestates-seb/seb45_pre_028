@@ -5,9 +5,11 @@ import { COMMON_CSS } from "../../constants/common_css";
 
 const StyledSidebar = styled.aside`
   position: sticky;
+  top: 3.6375rem;
   width: 10.25rem;
-  height: 100vh;
+  height: calc(100vh - 3.6375rem);
   padding: 1.5rem 0 0;
+  z-index: 0;
 
   p {
     font-size: 0.6875rem;
