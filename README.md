@@ -24,6 +24,8 @@
 ![Java](https://img.shields.io/badge/JAVA-E46F36?style=for-the-badge&logo=java&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white)
 ![SpringBoot](https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=Spring&logoColor=white)
+![SpringSecurity](https://img.shields.io/badge/Spring%20Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
+![SpringDataJPA](https://img.shields.io/badge/JPA-457979?style=for-the-badge&logo=java&logoColor=white)
 ![MySQL](https://shields.io/badge/MySQL-lightgrey?logo=mysql&style=for-the-badge&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-149545?style=for-the-badge&logo=JWT&logoColor=white)
 ### Commit convention
