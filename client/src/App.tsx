@@ -17,7 +17,7 @@ function App() {
           element: <Main />,
         },
         {
-          path: "/questions",
+          path: "/questions/:id",
           element: <Questions />,
         },
       ],
