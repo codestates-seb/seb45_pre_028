@@ -21,9 +21,11 @@
 ![recoil](https://img.shields.io/badge/recoil-3578E5?style=for-the-badge&logo=recoil&logoColor=white) 
 ![axios](https://img.shields.io/badge/axios-8b00ff?style=for-the-badge&logo=axios&logoColor=white)  
 
-![Java](https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white)
+![Java](https://img.shields.io/badge/JAVA-E46F36?style=for-the-badge&logo=java&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white)
-
+![SpringBoot](https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=Spring&logoColor=white)
+![MySQL](https://shields.io/badge/MySQL-lightgrey?logo=mysql&style=for-the-badge&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-149545?style=for-the-badge&logo=JWT&logoColor=white)
 ### Commit convention
 
 | Message  | 설명                                            |
