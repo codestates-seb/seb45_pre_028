@@ -66,12 +66,12 @@ const QuestionList = () => {
         <ul>
           {data.map((question) => (
             <li key={question.question_id}>
-              <div className="count">
+              {/* <div className="count">
                 <span className="answers-count">0 answers</span>
                 <span className="views">0 views</span>
-              </div>
+              </div> */}
               <h3>
-                <Link to="/" className="question-title">
+                <Link to={`/questions/${question.question_id}`} className="question-title">
                   {question.title}
                 </Link>
               </h3>
