@@ -16,7 +16,7 @@ import javax.validation.constraints.Positive;
 import java.util.List;
 @CrossOrigin
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("/question")
 @Validated
 public class QuestionController {
     private final QuestionService questionService;
@@ -56,7 +56,7 @@ public class QuestionController {
                                      @Positive @RequestParam int size) {
 
         // 페이지는 1부터 시작인데 데이터 액세스 계층에서 접근은 0부터라 page에서 -1
-        Page<Question> questionPage = questionService.findAnswers(page-1, size);
+        Page<Question> questionPage = questionService.findQuestions(page-1, size);
         PageInfo pageInfo = new PageInfo(page, size, (int) questionPage.getTotalElements(), questionPage.getTotalPages());
 
         List<Question> question = questionPage.getContent();

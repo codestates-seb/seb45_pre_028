@@ -2,6 +2,11 @@ package com.preproject.server.answer.service;
 
 import com.preproject.server.answer.entity.Answer;
 import com.preproject.server.answer.repository.AnswerRepository;
+import com.preproject.server.member.entity.Member;
+import com.preproject.server.member.service.MemberService;
+import com.preproject.server.question.entity.Question;
+import com.preproject.server.question.repository.QuestionRepository;
+import com.preproject.server.question.service.QuestionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -16,23 +21,35 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
 
-//    private final QuestionRepository questionRepository;
+    private final QuestionService questionService;
+    private final QuestionRepository questionRepository;
 
-    public AnswerService(AnswerRepository answerRepository) {
+    private final MemberService memberService;
+
+
+    public AnswerService(AnswerRepository answerRepository, MemberService memberService, QuestionService questionService, QuestionRepository questionRepository) {
         this.answerRepository = answerRepository;
+        this.memberService = memberService;
+        this.questionService = questionService;
+        this.questionRepository = questionRepository;
     }
 
-//     답변 등록
-    public Answer createAnswer(Answer answer) {
+    //     답변 등록
+    public Answer createAnswer(Answer answer, long questionId) {
 
-        // 회원을 조회하는 로직을 넣어야할지 아닐지?
-
-//        // questionRepository에서 질문id 확인 후 질문 조회
-//        Long questionId = questionRepository.getQuestionId(); -> 파라미터로 넣어야할듯
-//        Question question = findQuestionById(questionId);
+//        // 존재하는 회원인지 확인
+//        memberService.findVerifiedMember(answer.getMember().getMemberId());
 //
-//        //질문에 답변 연결
-//        answer.setQuestion(question);
+//        Question findQuestion = questionService.findQuestion(answer.getQuestion().getQuestionId());
+//
+//        answer.setQuestion(findQuestion);
+
+        // 주어진 Answer 객체에서 회원 정보와 질문 정보 가져오기
+//        Member verifiedMember = memberService.findVerifiedMember(answer.getMember().getMemberId());
+        Question question = questionService.findQuestionById(questionId);
+
+        answer.setQuestion(question);
+
 
         // 등록한 답변 저장
        return answerRepository.save(answer);
@@ -58,14 +75,16 @@ public class AnswerService {
     }
 
     // 답변 조회(페이지네이션 구현)
-    public Page<Answer> findAnswers(int page, int size) { // page, size를 매개변수로 멤버를 조회
+    public Page<Answer> findAnswers(int page, int size, long questionId) { // page, size를 매개변수로 멤버를 조회
+
+        Question question = questionService.findQuestionById(questionId);
 
         // page, size를 기반으로 PageRequest 객체를 내림차순으로 생성해서 페이지네이션 적용
         // PageRequest 페이지 번호와 페이지 크기를 나타내는 정보 값을 가짐 + 오름차순 정렬
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("answerId").ascending());
 
         // pageRequest를 이용해 등록된 답변 조회
-        Page<Answer> answerPage = answerRepository.findAll(pageRequest);
+        Page<Answer> answerPage = answerRepository.findByQuestion(question, pageRequest);
 
         return answerPage;
     }

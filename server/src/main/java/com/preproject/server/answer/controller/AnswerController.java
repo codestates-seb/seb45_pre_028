@@ -18,7 +18,6 @@ import java.util.List;
  * question, member 클래스가 아직 없으므로 작성할 답변을 memberId와 questionId를 통해서 조회해하는 부분은 주석처리하고
  * -> 답변 등록할 걸 통해서 질문에 답변id가 부여되므로 질문을 확인하는건 필요없는 부분일듯함!
  * 답변 crud만 작성해서 테스트해보기!
- *
  */
 
 @RestController
@@ -38,14 +37,14 @@ public class AnswerController {
 
     // 답변 등록
     @PostMapping("/question/{question-id}/answer")
-    public ResponseEntity postAnswer(@PathVariable("question-id") long questionId,
-                                             @Valid @RequestBody AnswerPostDto answerPostDto) {
+    public ResponseEntity postAnswer(@Positive @PathVariable("question-id") long questionId,
+                                     @Valid @RequestBody AnswerPostDto answerPostDto) {
 
         // answerPostDto를 Answer 엔티티로 변환
         Answer answer = answerMapper.answerPostDtoToanswer(answerPostDto);
 
         // AnswerService를 사용하여 답변을 등록하고 등록된 답변을 반환
-        Answer response = answerService.createAnswer(answer);
+        Answer response = answerService.createAnswer(answer, questionId);
 
         // 생성된 답변을 DTO로 변환하여 ResponseEntity로 감싸서 반환
         return new ResponseEntity<>(answerMapper.answerToAnswerResponseDto(response), HttpStatus.CREATED);
@@ -55,7 +54,7 @@ public class AnswerController {
     // 답변 수정 (답변 id를 통해서 조회 후 수정)
     @PatchMapping("/answer/{answer-id}")
     public ResponseEntity patchAnswer(@PathVariable("answer-id") long answerId,
-                                              @Valid @RequestBody AnswerPatchDto answerPatchDto) {
+                                      @Valid @RequestBody AnswerPatchDto answerPatchDto) {
 
         // 수정할 답변 찾기
         Answer updateAnswer = answerService.findAnswerById(answerId);
@@ -89,13 +88,15 @@ public class AnswerController {
 
     }
 
-    // 페이지네이션을 적용하여 조회
+    // 페이지네이션을 적용하여 조회(질문 번호당)
     @GetMapping("/question/{question-id}/answer")
-    public ResponseEntity getAnswers(@Positive @RequestParam int page,
+    public ResponseEntity getAnswers(@PathVariable("question-id") long questionId,
+                                     @Positive @RequestParam int page,
                                      @Positive @RequestParam int size) {
 
+        // questionId를 통해 질문 번호를 조회
         // 페이지는 1부터 시작인데 데이터 액세스 계층에서 접근은 0부터라 page에서 -1
-        Page<Answer> answerPage = answerService.findAnswers(page-1, size);
+        Page<Answer> answerPage = answerService.findAnswers(page - 1, size, questionId);
         PageInfo pageInfo = new PageInfo(page, size, (int) answerPage.getTotalElements(), answerPage.getTotalPages());
 
         List<Answer> answers = answerPage.getContent();

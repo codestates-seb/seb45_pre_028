@@ -1,6 +1,8 @@
 package com.preproject.server.answer.entity;
 
 
+import com.preproject.server.member.entity.Member;
+import com.preproject.server.question.entity.Question;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -60,24 +62,25 @@ public class Answer {
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
 
-//    // 멤버와 ManyToOne 관계 설정
-//    @ManyToOne
-//    @JoinColumn
-//    private Member member;
-//
-//    // 질문과 ManyToOne 관계 설정
-//    @ManyToOne
-//    @JoinColumn
-//    private Question question;
+    // 멤버와 ManyToOne 관계 설정
+    @ManyToOne
+    @JoinColumn
+    private Member member;
+
+    // 질문과 ManyToOne 관계 설정
+    @ManyToOne
+    @JoinColumn
+    private Question question;
 
 
-//    // 엔티티 추가 시 시간 정보 자동 생성
-//    @CreatedDate
-//    @Column(updatable = false)
-//    public LocalDateTime createAt;
-//
-//    // 엔티티 마지막 수정 시간을 자동으로 기록
-//    @LastModifiedDate
-//    @Column
-//    private LocalDateTime modifiedAt;
+    // 질문 답변 양방향 관계 설정. Answer 객체에 질문을 추가
+    public void setQuestion(Question question) {
+        this.question = question;
+
+        if (!this.question.getAnswers().contains(this)) {
+            this.question.setAnswer(this);
+        }
+    }
 }
+
+

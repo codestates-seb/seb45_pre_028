@@ -5,8 +5,6 @@ import com.preproject.server.member.dto.MemberPostDto;
 import com.preproject.server.member.entity.Member;
 import com.preproject.server.member.mapper.MemberMapper;
 import com.preproject.server.member.service.MemberService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
