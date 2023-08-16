@@ -3,7 +3,7 @@
 // import "@stackoverflow/stacks-editor/dist/styles.css";
 // import "@stackoverflow/stacks/dist/css/stacks.css";
 import axios, { AxiosError } from "axios";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
@@ -51,6 +51,12 @@ const StyledField = styled.div`
     border-radius: 6px;
     border: none;
     color: #fff;
+
+    &:hover,
+    &:focus {
+      outline: none;
+      background: ${COMMON_CSS["button-hover-color"]};
+    }
   }
 
   #editor-container {
@@ -90,7 +96,9 @@ const StyledDiscardButton = styled.button`
   padding: 0.8rem;
   border-radius: 6px;
 
-  &:hover {
+  &:hover,
+  &:focus {
+    outline: none;
     background: #fdf2f2;
   }
 `;

@@ -7,7 +7,7 @@ import WritePageTitle from "../components/write/WritePageTitle";
 const StyledLayout = styled.main`
   max-width: 79rem;
   margin: 0 auto;
-  padding: 0 1.5rem 1.5rem;
+  padding: 0 1.5rem 3.75rem;
 
   display: flex;
   align-items: flex-start;
