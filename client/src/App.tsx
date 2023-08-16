@@ -1,6 +1,7 @@
 import type { RouteObject } from "react-router-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
+import Error from "./pages/Error";
 import Main from "./pages/Main";
 import Questions from "./pages/Questions";
 import RootLayout from "./pages/Root";
@@ -26,6 +27,7 @@ function App() {
       path: "/write",
       element: <Write />,
     },
+    { path: "*", element: <Error /> },
   ];
 
   const router = createBrowserRouter(routes);
