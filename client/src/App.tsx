@@ -3,8 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 import Main from "./pages/Main";
 import Questions from "./pages/Questions";
-
 import RootLayout from "./pages/Root";
+import Write from "./pages/Write";
 
 function App() {
   const routes: RouteObject[] = [
@@ -21,6 +21,10 @@ function App() {
           element: <Questions />,
         },
       ],
+    },
+    {
+      path: "/write",
+      element: <Write />,
     },
   ];
 

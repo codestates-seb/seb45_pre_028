@@ -59,6 +59,10 @@ select {
   padding: 0;
 }
 
+button:hover {
+  cursor: pointer;
+}
+
 html {
   box-sizing: border-box;
 }
