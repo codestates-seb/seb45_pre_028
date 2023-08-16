@@ -1,9 +1,4 @@
 spring:
-  mvc: # swagger ??
-    pathmatch:
-      matching-strategy: ant_path_matcher
-
-
 
   h2:
     console:
@@ -36,3 +31,9 @@ logging:
           descriptor:
             sql:
               BasicBinder: trace
+
+jwt:
+  key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 420
+
