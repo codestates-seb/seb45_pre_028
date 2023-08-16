@@ -6,11 +6,13 @@ import axios, { AxiosError } from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { questionsState } from "../../atoms/atoms";
+import { modalState, questionsState } from "../../atoms/atoms";
 import { COMMON_CSS } from "../../constants/common_css";
 import { useFetch } from "../../hooks/useFetch";
 import { Question } from "../../types/types";
+import Modal from "../common/Modal";
 
 const StyledField = styled.div`
   label {
@@ -81,11 +83,25 @@ const StyledField = styled.div`
   }
 `;
 
+const StyledDiscardButton = styled.button`
+  color: #ab262a;
+  background: transparent;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 6px;
+
+  &:hover {
+    background: #fdf2f2;
+  }
+`;
+
 const WriteForm = (): JSX.Element => {
   const { fetchData } = useFetch(questionsState, "http://localhost:3001/question");
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
-  const { register, handleSubmit } = useForm<Question>();
+  const setModal = useSetRecoilState(modalState);
+  const modalIsOpen = useRecoilValue(modalState);
+  const { register, handleSubmit, reset } = useForm<Question>();
 
   const onClickHandler = () => {
     setIsActive(true);
@@ -115,6 +131,17 @@ const WriteForm = (): JSX.Element => {
       });
     }
   };
+
+  const toggleModal = () => {
+    setModal(!modalIsOpen);
+  };
+
+  const resetValue = () => {
+    reset({ title: "", content: "" });
+    setModal(!modalIsOpen);
+    setIsActive(false);
+  };
+
   // const [editorInitialized, setEditorInitialized] = useState(false);
 
   // useEffect(() => {
@@ -149,9 +176,32 @@ const WriteForm = (): JSX.Element => {
         <textarea id="content" {...register("content")}></textarea>
         {/* <div id="editor-container"></div> */}
         <button className="button" onClick={handleSubmit(onSubmit)}>
-          Submit
+          Post your question
         </button>
       </StyledField>
+
+      {modalIsOpen && (
+        <Modal>
+          <>
+            <h1>Discard question</h1>
+            <p>Are you sure you want to discard this question? This cannot be undone.</p>
+            <div className="button-gap">
+              <button className="discard-action" onClick={resetValue}>
+                Discard question
+              </button>
+              <button className="cancel-action" onClick={toggleModal}>
+                Cancel
+              </button>
+            </div>
+          </>
+        </Modal>
+      )}
+
+      {isActive && (
+        <StyledDiscardButton onClick={toggleModal} className="discard-button">
+          Discard draft
+        </StyledDiscardButton>
+      )}
     </>
   );
 };
