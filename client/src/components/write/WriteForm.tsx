@@ -130,6 +130,7 @@ const WriteForm = (): JSX.Element => {
     data = {
       ...data,
       createdAt: new Date().toISOString(),
+      modifiedAt: new Date().toISOString(),
       member_id: 1,
     };
 
