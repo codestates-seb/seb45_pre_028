@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -12,6 +13,7 @@ public class MemberPatchDto {
     private long memberId;
 
     @NotBlank(message = "이름은 공백이 아니어야 합니다.")
+    @Size(min = 2,max = 12,message = "이름은 2자 이상 12자 이하여야 합니다.")
     private String name;
 
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,12}$",
