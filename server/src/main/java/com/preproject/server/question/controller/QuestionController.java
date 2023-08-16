@@ -6,6 +6,7 @@ import com.preproject.server.question.mapper.QuestionMapper;
 import com.preproject.server.question.service.QuestionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/questions")
-
+@Validated
 public class QuestionController {
     private final QuestionService questionService;
     private final QuestionMapper mapper;
@@ -27,7 +28,7 @@ public class QuestionController {
     }
 
     @PostMapping()
-    public ResponseEntity postQuestion(@RequestBody QuestionPostDto questionPostDto){
+    public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto){
         Question question = mapper.questionPostDtoToQuestion(questionPostDto);
         Question response = questionService.createQuestion(question);
         return new ResponseEntity(mapper.questionToQuestionResponseDto(response), HttpStatus.CREATED);
@@ -35,7 +36,7 @@ public class QuestionController {
     }
     @PatchMapping("/{question-id}")
     public ResponseEntity patchQuestion(@Positive @PathVariable("question-id") long questionId,
-                                        @RequestBody QuestionPatchDto questionPatchDto){
+                                        @Valid @RequestBody QuestionPatchDto questionPatchDto){
         questionPatchDto.setQuestionId(questionId);
         Question question = mapper.questionPatchDtoToQuestion(questionPatchDto);
         Question response = questionService.updateQuestion(question);

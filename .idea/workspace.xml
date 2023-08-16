@@ -5,19 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c2c6eacf-fccb-4153-ad81-c7af1fa859fc" name="Changes" comment="feat: validator 추가(질문)">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/server.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/seb45_pre_028.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/server/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/preproject/server/ServerApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/preproject/server/ServerApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/com/preproject/server/question/controller/QuestionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/com/preproject/server/question/controller/QuestionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,12 +25,7 @@
       <state>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="server" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -74,7 +60,6 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -115,7 +100,8 @@
       <workItem from="1691908696832" duration="7696000" />
       <workItem from="1691973142088" duration="769000" />
       <workItem from="1691978915877" duration="3190000" />
-      <workItem from="1692071331522" duration="11194000" />
+      <workItem from="1692071331522" duration="12140000" />
+      <workItem from="1692147917650" duration="4084000" />
     </task>
     <task id="LOCAL-00001" summary="feat: 엔티티 추가(질문)">
       <created>1692084486302</created>
@@ -180,7 +166,14 @@
       <option name="project" value="LOCAL" />
       <updated>1692084943907</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="feat: validator 추가(질문)">
+      <created>1692085113165</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1692085113165</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
