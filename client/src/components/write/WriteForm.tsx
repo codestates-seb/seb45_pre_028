@@ -40,7 +40,6 @@ const StyledField = styled.div`
   }
 
   textarea {
-    resize: none;
     min-height: 18.75rem;
   }
 
@@ -115,6 +114,14 @@ const WriteForm = (): JSX.Element => {
     setIsActive(true);
   };
 
+  //isActive가 아닐때 tab키로 cursor이동 방지
+  const onKeyDownHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "Tab") {
+      console.log(event);
+      event.preventDefault();
+    }
+  };
+
   const onSubmit = async (data: Question) => {
     // const editorData = document.querySelector(".js-editor") as HTMLElement;
     // const formData = { ...data, content: editorData.innerHTML };
@@ -173,7 +180,11 @@ const WriteForm = (): JSX.Element => {
         <label htmlFor="title">Title</label>
         <p>Be specific and imagine you’re asking a question to another person.</p>
         <input id="title" {...register("title")} />
-        <button className="button" onClick={onClickHandler}>
+        <button
+          className="button"
+          onClick={onClickHandler}
+          onKeyDown={isActive ? undefined : onKeyDownHandler}
+        >
           Next
         </button>
       </StyledField>
