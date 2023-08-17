@@ -58,7 +58,7 @@ public class Question {
      */
 
     // 한 개의 질문에 여러 개의 답변을 달 수 있음
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private final List<Answer> answers = new ArrayList<>();
 
 

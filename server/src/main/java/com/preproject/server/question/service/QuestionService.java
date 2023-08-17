@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class QuestionService {
     private final QuestionRepository questionRepository;
 

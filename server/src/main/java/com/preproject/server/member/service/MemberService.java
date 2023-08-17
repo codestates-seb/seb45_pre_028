@@ -4,12 +4,14 @@ import com.preproject.server.member.entity.Member;
 import com.preproject.server.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
 
