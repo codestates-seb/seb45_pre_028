@@ -149,15 +149,19 @@ const Header = (): JSX.Element => {
           </svg>
           <input {...register("search")} placeholder="Search..."></input>
         </Search>
-        <Login
-          onClick={() => {
-            navigate("/login");
-          }}
-        >
-          <div>
+        <Login>
+          <div
+            onClick={() => {
+              navigate("/login");
+            }}
+          >
             <span>Log in</span>
           </div>
-          <div>
+          <div
+            onClick={() => {
+              navigate("/sign");
+            }}
+          >
             <span>Sign up</span>
           </div>
         </Login>
