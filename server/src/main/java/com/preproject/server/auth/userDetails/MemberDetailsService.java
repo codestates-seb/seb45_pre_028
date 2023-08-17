@@ -1,6 +1,8 @@
 package com.preproject.server.auth.userDetails;
 
 import com.preproject.server.auth.utils.CustomAuthorityUtils;
+import com.preproject.server.exception.BusinessLogicException;
+import com.preproject.server.exception.ExceptionCode;
 import com.preproject.server.member.entity.Member;
 import com.preproject.server.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +18,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Component
 public class MemberDetailsService implements UserDetailsService {
+
     private final MemberRepository memberRepository;
     private final CustomAuthorityUtils customAuthorityUtils;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
-        Member findMember = optionalMember.orElseThrow();
+        Member findMember = optionalMember.orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
         return new MemberDetails(findMember);
     }
