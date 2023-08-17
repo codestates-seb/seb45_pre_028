@@ -1,6 +1,8 @@
 package com.preproject.server.member.service;
 
 import com.preproject.server.auth.utils.CustomAuthorityUtils;
+import com.preproject.server.exception.BusinessLogicException;
+import com.preproject.server.exception.ExceptionCode;
 import com.preproject.server.member.entity.Member;
 import com.preproject.server.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +40,12 @@ public class MemberService {
         Member findMember = findVerifiedMember(member.getMemberId());
 
         Optional.ofNullable(member.getName()).ifPresent(findMember::setName);
-        Optional.ofNullable(member.getPassword()).ifPresent(password->findMember.setPassword(passwordEncoder.encode(password)));
+        Optional.ofNullable(member.getPassword()).ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
         findMember.setModifiedAt(LocalDateTime.now());
 
         return memberRepository.save(findMember);
     }
+
     @Transactional(readOnly = true)
     public Member findMember(long memberId) {
         return findVerifiedMember(memberId);
@@ -56,13 +59,15 @@ public class MemberService {
     // 존재하는 멤버인지 확인하는 메서드
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
-        Member findMember = optionalMember.orElseThrow();
+        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return findMember;
     }
 
     //    회원가입시 존재하는 회원인지 확인하는 메서드
     private void verifyExistEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
+        if (member.isPresent())
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
 //    Exception 코드 작성 후 예외처리 해야함
     }
 }
