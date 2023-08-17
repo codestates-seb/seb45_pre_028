@@ -51,6 +51,11 @@ dependencies {
 //  gson
     implementation 'com.google.code.gson:gson:2.9.0'
 
+//  oauth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+//  thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 //	mysql
 //	runtimeOnly 'com.mysql:mysql-connector-j'
 
