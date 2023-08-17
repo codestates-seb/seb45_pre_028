@@ -1,5 +1,4 @@
-import axios from "axios";
-import { atom, selector } from "recoil";
+import { atom } from "recoil";
 import { Question } from "../types/types";
 
 export const questionsState = atom<Question[]>({
@@ -7,10 +6,7 @@ export const questionsState = atom<Question[]>({
   default: [],
 });
 
-export const readData = selector<Array<Question>>({
-  key: "readData",
-  get: async () => {
-    const response = await axios.get("http://localhost:3001/question");
-    return response.data;
-  },
+export const modalState = atom<boolean>({
+  key: "modalState",
+  default: false,
 });

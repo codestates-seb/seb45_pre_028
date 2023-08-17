@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { questionsState, readData } from "../../atoms/atoms";
+import { questionsState } from "../../atoms/atoms";
 import { COMMON_CSS } from "../../constants/common_css";
 import { useFetch } from "../../hooks/useFetch";
 import { Question } from "../../types/types";
+import { getFormattedDate } from "../../util/date";
 
 const StyledQuestionList = styled.section`
   color: ${COMMON_CSS["font-color-black"]};
@@ -56,7 +58,23 @@ const StyledQuestionList = styled.section`
 `;
 
 const QuestionList = () => {
-  const { isLoading, isError, data } = useFetch<Question[]>(questionsState, readData);
+  const { fetchData, isLoading, isError, data } = useFetch<Question[]>(
+    questionsState,
+    "http://localhost:3001/question",
+  );
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const printState = (createdAt: string, modifiedAt: string): string => {
+    return createdAt === modifiedAt ? "asked" : "modified";
+  };
+
+  const printDate = (createdAt: string, modifiedAt: string): string => {
+    const date = new Date(createdAt === modifiedAt ? createdAt : modifiedAt);
+    return getFormattedDate(date);
+  };
 
   return (
     <StyledQuestionList>
@@ -65,21 +83,25 @@ const QuestionList = () => {
       {!isLoading && (
         <ul>
           {data.map((question) => (
-            <li key={question.question_id}>
+            <li key={question.id}>
               {/* <div className="count">
                 <span className="answers-count">0 answers</span>
                 <span className="views">0 views</span>
               </div> */}
               <h3>
-                <Link to={`/questions/${question.question_id}`} className="question-title">
+                <Link to={`/questions/${question.id}`} className="question-title">
                   {question.title}
                 </Link>
               </h3>
               <p className="summary">{question.content}</p>
               <div className="user">
                 <span className="id">{question.member_id}</span>
-                <span className="activity">{question.modifiedAt ? "modefied" : "asked"}</span>
-                <span className="timestamp">{question.createdAt}</span>
+                <span className="activity">
+                  {printState(question.createdAt, question.modifiedAt)}
+                </span>
+                <span className="timestamp">
+                  {printDate(question.createdAt, question.modifiedAt)}
+                </span>
               </div>
             </li>
           ))}

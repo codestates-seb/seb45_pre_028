@@ -1,10 +1,11 @@
 import type { RouteObject } from "react-router-dom";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RecoilRoot } from "recoil";
+import Error from "./pages/Error";
 import Main from "./pages/Main";
 import Questions from "./pages/Questions";
-
 import RootLayout from "./pages/Root";
+import Write from "./pages/Write";
 
 function App() {
   const routes: RouteObject[] = [
@@ -22,6 +23,11 @@ function App() {
         },
       ],
     },
+    {
+      path: "/write",
+      element: <Write />,
+    },
+    { path: "*", element: <Error /> },
   ];
 
   const router = createBrowserRouter(routes);
