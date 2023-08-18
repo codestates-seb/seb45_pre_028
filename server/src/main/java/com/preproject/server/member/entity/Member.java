@@ -40,7 +40,8 @@ public class Member {
 
     @Column(nullable = false)
     private LocalDateTime modifiedAt = LocalDateTime.now();
-
+    
+    // 회원과 답변 양방향 관계 설정
     @OneToMany(mappedBy = "member")
     private List<Answer> answers = new ArrayList<>();
 
