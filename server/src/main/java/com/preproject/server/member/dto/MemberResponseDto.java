@@ -13,5 +13,4 @@ public class MemberResponseDto {
     private String name;
     private long questionCount;
     private long answerCount;
-
 }
