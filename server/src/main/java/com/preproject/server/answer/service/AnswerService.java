@@ -3,6 +3,7 @@ package com.preproject.server.answer.service;
 import com.preproject.server.answer.entity.Answer;
 import com.preproject.server.answer.repository.AnswerRepository;
 import com.preproject.server.member.entity.Member;
+import com.preproject.server.member.repository.MemberRepository;
 import com.preproject.server.member.service.MemberService;
 import com.preproject.server.question.entity.Question;
 import com.preproject.server.question.repository.QuestionRepository;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,21 +23,25 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
 
-    private final QuestionService questionService;
     private final QuestionRepository questionRepository;
+    private final MemberRepository memberRepository;
+    private final QuestionService questionService;
 
     private final MemberService memberService;
 
 
-    public AnswerService(AnswerRepository answerRepository, MemberService memberService, QuestionService questionService, QuestionRepository questionRepository) {
+
+    public AnswerService(AnswerRepository answerRepository, MemberService memberService,
+                         QuestionService questionService, QuestionRepository questionRepository,MemberRepository memberRepository) {
         this.answerRepository = answerRepository;
         this.memberService = memberService;
         this.questionService = questionService;
         this.questionRepository = questionRepository;
+        this.memberRepository = memberRepository;
     }
 
     //     답변 등록
-    public Answer createAnswer(Answer answer, long questionId) {
+    public Answer createAnswer(Answer answer, long questionId, long memberId) {
 
 //        // 존재하는 회원인지 확인
 //        memberService.findVerifiedMember(answer.getMember().getMemberId());
@@ -46,13 +52,19 @@ public class AnswerService {
 
         // 주어진 Answer 객체에서 회원 정보와 질문 정보 가져오기
 //        Member verifiedMember = memberService.findVerifiedMember(answer.getMember().getMemberId());
+
+        // 질문 ID를 이용해서 질문 찾기
         Question question = questionService.findQuestionById(questionId);
 
+        // 회원 ID를 이용해서 회원 찾기
+        Member member = memberService.findVerifiedMember(memberId);
+
+        // 답변 엔티티에 질문과 회원정보 설정
         answer.setQuestion(question);
+        answer.setMember(member);
 
-
-        // 등록한 답변 저장
-       return answerRepository.save(answer);
+        // 설정된 답변 엔티티를 저장하고 반환
+        return answerRepository.save(answer);
     }
 
 
@@ -101,12 +113,32 @@ public class AnswerService {
         return  answer;
     }
 
-//    // 회원 조회
-//    public Member findMemberById(Long memberId) {
-//        Optional<Member> optionalMember = memberRepository.findById(memberId);
-//        Member member = optionalMember.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//        return member;
-//    }
+    /**
+     * 회원이 답변한 개수 카운트해주는 메서드 추가 + 회원 findMemberById 메서드
+     */
+    public int countAnswerByMemberId(long memberId) {
+
+        // 회원 ID로 Member 객체를 가져온다.
+        Member member = findMemberById(memberId);
+
+        // 해당 회원이 작성한 답변의 개수를 센다.
+        int answerCount = 0;
+        List<Answer> answers = answerRepository.findAll();
+        for (Answer answer : answers) {
+            if (answer.getMember() != null && answer.getMember().equals(member)) {
+                answerCount++;
+            }
+        }
+
+        return answerCount;
+    }
+
+    // 회원 조회
+    public Member findMemberById(Long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Member member = optionalMember.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return member;
+    }
 //
 //    // 질문 조회
 //    public Question findQuestionById(Long questionId) {

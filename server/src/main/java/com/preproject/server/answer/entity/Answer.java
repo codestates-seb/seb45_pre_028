@@ -51,9 +51,9 @@ public class Answer {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+
     // @CreatedDate, @LastModifiedDate가 생성이랑 수정 시간을 자동으로 설정해줌.
     // 이 애너테이션을 사용하려면 추Spring Data JPA의 Auditing 관련 설정을 해줘야함
-
     @CreatedDate
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -79,6 +79,15 @@ public class Answer {
 
         if (!this.question.getAnswers().contains(this)) {
             this.question.setAnswer(this);
+        }
+    }
+
+    // 회원과 답변 양방향 관계 설정
+    public void setMember(Member member) {
+        this.member = member;
+
+        if (!this.member.getAnswers().contains(this)) {
+            this.member.addAnswer(this);
         }
     }
 }

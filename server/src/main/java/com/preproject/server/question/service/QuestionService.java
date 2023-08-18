@@ -2,6 +2,8 @@ package com.preproject.server.question.service;
 
 
 import com.preproject.server.answer.entity.Answer;
+import com.preproject.server.member.entity.Member;
+import com.preproject.server.member.repository.MemberRepository;
 import com.preproject.server.question.exception.BusinessLogicException;
 import com.preproject.server.question.exception.ExceptionCode;
 import com.preproject.server.question.entity.Question;
@@ -21,9 +23,11 @@ import java.util.Optional;
 @Transactional
 public class QuestionService {
     private final QuestionRepository questionRepository;
+    private final MemberRepository memberRepository;
 
-    public QuestionService(QuestionRepository questionRepository) {
+    public QuestionService(QuestionRepository questionRepository, MemberRepository memberRepository) {
         this.questionRepository = questionRepository;
+        this.memberRepository = memberRepository;
     }
 
     public Question createQuestion(Question question){
@@ -71,6 +75,32 @@ public class QuestionService {
         Optional<Question> optionalQuestion = questionRepository.findById(questionId);
         Question question = optionalQuestion.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return question;
+    }
+
+    /**
+     * 회원이 질문한 개수 카운트해주는 메서드 추가 + 회원 findMemberById 메서드
+     */
+    public int countQuestionsByMemberId(long memberId) {
+        // 회원 ID로 Member 객체를 가져온다.
+        Member member = findMemberById(memberId);
+
+        // 해당 회원이 작성한 질문의 개수를 센다.
+        int questionCount = 0;
+        List<Question> questions = questionRepository.findAll();
+        for (Question question : questions) {
+            if (question.getMember().equals(member)) {
+                questionCount++;
+            }
+        }
+
+        return questionCount;
+    }
+
+        // 회원 조회
+    public Member findMemberById(Long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Member member = optionalMember.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return member;
     }
 
 }
