@@ -1,9 +1,12 @@
 import { atom } from "recoil";
 import { Question } from "../types/types";
 
-export const questionsState = atom<Question[]>({
+export const questionsState = atom<Question>({
   key: "questionsState",
-  default: [],
+  default: {
+    questionData: [],
+    pageInfo: [],
+  },
 });
 
 export const modalState = atom<boolean>({

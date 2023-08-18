@@ -13,6 +13,6 @@ export const COMMON_CSS: CommonCss = {
   "button-color": "#0a95ff",
   "button-hover-color": "#0074cc",
   "footer-color": "#232629",
-  "footer-font-main-color": "#BABFC4",
+  "footer-font-main-color": "#babfc4",
   "footer-font-sub-color": "#9199A1",
 };
