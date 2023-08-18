@@ -18,12 +18,6 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    // 질문, 답변 수를 조회하기 위해서 추가
-    private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
-
-
-
     public Member createMember(Member member) {
         verifyExistEmail(member.getEmail());
         return memberRepository.save(member);
@@ -44,8 +38,6 @@ public class MemberService {
         return findVerifiedMember(memberId);
     }
 
-
-
     public void deleteMember(long memberId) {
         Member findMember = findVerifiedMember(memberId);
         memberRepository.delete(findMember);
@@ -62,5 +54,5 @@ public class MemberService {
         Optional<Member> member = memberRepository.findByEmail(email);
 //    Exception 코드 작성 후 예외처리 해야함
     }
-
+    
 }
