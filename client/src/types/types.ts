@@ -1,6 +1,6 @@
 export interface Question {
   questionData: QuestionData[];
-  pageInfo: PageInfo[];
+  pageInfo: PageInfo;
 }
 
 export interface QuestionData {
@@ -14,11 +14,12 @@ export interface QuestionData {
 
 export interface Answer {
   answerData: AnswerData[];
-  pageInfo: PageInfo[];
+  pageInfo: PageInfo;
 }
 
 export interface AnswerData {
-  answerId: number;
+  id?: string;
+  questionId: number;
   content: string;
   createdAt: string;
   modifiedAt: string;
