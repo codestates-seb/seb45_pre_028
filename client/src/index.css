@@ -63,7 +63,9 @@ select {
 button:hover {
   cursor: pointer;
 }
-
+button{
+  cursor: pointer;
+}
 html {
   box-sizing: border-box;
 }

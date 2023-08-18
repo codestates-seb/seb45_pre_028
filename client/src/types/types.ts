@@ -1,17 +1,33 @@
 export interface Question {
-  id: string;
+  questionData: QuestionData[];
+  pageInfo: PageInfo;
+}
+
+export interface QuestionData {
+  id?: string;
+  questionId: number;
   title: string;
+  content: string;
   createdAt: string;
   modifiedAt: string;
-  member_id: number;
-  content: string;
 }
 
 export interface Answer {
-  answer_id: number;
-  title: string;
+  answerData: AnswerData[];
+  pageInfo: PageInfo;
+}
+
+export interface AnswerData {
+  id?: string;
+  questionId: number;
+  content: string;
   createdAt: string;
   modifiedAt: string;
-  member_id: number;
-  question_id: string;
+}
+
+export interface PageInfo {
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
 }

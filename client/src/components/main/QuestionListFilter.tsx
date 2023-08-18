@@ -40,7 +40,7 @@ const QuestionListFilter = () => {
 
   return (
     <StyledListFilter>
-      <span>{data.length.toLocaleString()} questions with bounties</span>
+      <span>{data.questionData.length.toLocaleString()} questions with bounties</span>
       <ul>
         <li>
           <button>Newest</button>
