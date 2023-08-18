@@ -4,8 +4,10 @@ import styled from "styled-components";
 import { questionsState } from "../../atoms/atoms";
 import { COMMON_CSS } from "../../constants/common_css";
 import { useFetch } from "../../hooks/useFetch";
+import { usePagination } from "../../hooks/usePagination";
 import { Question } from "../../types/types";
 import { getFormattedDate } from "../../util/date";
+import Pagination from "../common/Pagenation";
 
 const StyledQuestionList = styled.section`
   color: ${COMMON_CSS["font-color-black"]};
@@ -58,13 +60,24 @@ const StyledQuestionList = styled.section`
 `;
 
 const QuestionList = () => {
-  const { fetchData, isLoading, isError, data } = useFetch<Question>(
+  const PAGE_SIZE: number = 5;
+
+  const {
+    currentPage,
+    totalPages,
+    setTotalPages,
+    onPageChangeHandler,
+    onPrevPageHandler,
+    onNextPageHandler,
+  } = usePagination<Question>(questionsState, PAGE_SIZE);
+
+  const { isLoading, isError, data } = useFetch<Question>(
     questionsState,
-    "/question",
+    `/question?page=${currentPage}&size=${PAGE_SIZE}`,
   );
 
   useEffect(() => {
-    fetchData();
+    setTotalPages(data.pageInfo.totalPages);
   }, []);
 
   const printState = (createdAt: string, modifiedAt: string): string => {
@@ -77,37 +90,47 @@ const QuestionList = () => {
   };
 
   return (
-    <StyledQuestionList>
-      {isLoading && <div>Loading...</div>}
-      {isError && <div>문제가 발생했습니다.</div>}
-      {!isLoading && (
-        <ul>
-          {data.questionData.map((question) => (
-            <li key={question.questionId}>
-              {/* <div className="count">
+    <>
+      <StyledQuestionList>
+        {isLoading && <div>Loading...</div>}
+        {isError && <div>문제가 발생했습니다.</div>}
+        {!isLoading && (
+          <ul>
+            {data.questionData.map((question) => (
+              <li key={question.questionId}>
+                {/* <div className="count">
                 <span className="answers-count">0 answers</span>
                 <span className="views">0 views</span>
               </div> */}
-              <h3>
-                <Link to={`/questions/${question.questionId}`} className="question-title">
-                  {question.title}
-                </Link>
-              </h3>
-              <p className="summary">{question.content}</p>
-              <div className="user">
-                <span className="id">{/*question.member_id*/}작성자</span>
-                <span className="activity">
-                  {printState(question.createdAt, question.modifiedAt)}
-                </span>
-                <span className="timestamp">
-                  {printDate(question.createdAt, question.modifiedAt)}
-                </span>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
-    </StyledQuestionList>
+                <h3>
+                  <Link to={`/questions/${question.questionId}`} className="question-title">
+                    {question.title}
+                  </Link>
+                </h3>
+                <p className="summary">{question.content}</p>
+                <div className="user">
+                  <span className="id">{/*question.member_id*/}작성자</span>
+                  <span className="activity">
+                    {printState(question.createdAt, question.modifiedAt)}
+                  </span>
+                  <span className="timestamp">
+                    {printDate(question.createdAt, question.modifiedAt)}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </StyledQuestionList>
+
+      <Pagination
+        currentPage={currentPage}
+        onPrevPage={onPrevPageHandler}
+        totalPages={totalPages}
+        onPageChange={onPageChangeHandler}
+        onNextPage={onNextPageHandler}
+      />
+    </>
   );
 };
 
