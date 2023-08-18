@@ -68,10 +68,20 @@ public class SecurityConfiguration {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
+                        //member
                         .antMatchers(HttpMethod.POST, "/member/signup").permitAll()
                         .antMatchers(HttpMethod.PATCH, "/member/**").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/member/**").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/member/**").hasRole("USER")
+                        //question
+                        .antMatchers(HttpMethod.POST,"/**/question").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/question/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE,"/question/**").hasRole("USER")
+                        //answer
+                        .antMatchers(HttpMethod.POST,"/**/question/**/answer").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH,"/question/**/answer/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE,"/question/**/answer/**").hasRole("USER")
+
                         .anyRequest().permitAll())
                 .oauth2Login(oauth2->oauth2
                         .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer,customAuthorityUtils,memberRepository)));
