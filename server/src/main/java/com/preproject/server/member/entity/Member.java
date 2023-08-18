@@ -5,6 +5,7 @@ import com.preproject.server.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -29,6 +30,9 @@ public class Member {
     @Column(nullable = false)
     private String name;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -45,5 +49,9 @@ public class Member {
         if(answer.getMember() != this){
             answer.setMember(this);
         }
+    }
+    public enum MEMBER_ROLE{
+        ROLE_ADMIN,
+        ROLE_USER;
     }
 }

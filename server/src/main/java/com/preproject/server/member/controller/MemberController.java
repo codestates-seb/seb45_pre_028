@@ -1,6 +1,5 @@
 package com.preproject.server.member.controller;
 
-import com.preproject.server.answer.repository.AnswerRepository;
 import com.preproject.server.answer.service.AnswerService;
 import com.preproject.server.member.dto.MemberPatchDto;
 import com.preproject.server.member.dto.MemberPostDto;
@@ -8,7 +7,6 @@ import com.preproject.server.member.dto.MemberResponseDto;
 import com.preproject.server.member.entity.Member;
 import com.preproject.server.member.mapper.MemberMapper;
 import com.preproject.server.member.service.MemberService;
-import com.preproject.server.question.repository.QuestionRepository;
 import com.preproject.server.question.service.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,20 +26,18 @@ public class MemberController {
 
     private final MemberMapper mapper;
     private final MemberService memberService;
-    private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
     private final QuestionService questionService;
     private final AnswerService answerService;
 
 
-    @PostMapping("/createMember") //엔드포인트 변경예정
+    @PostMapping("/signup")
     public ResponseEntity postMember(@Validated @RequestBody MemberPostDto memberPostDto) {
         Member member = memberService.createMember(mapper.memberPostDtoToMember(memberPostDto));
 
         return new ResponseEntity<>(mapper.memberToMemberResponseDto(member), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/updateMember/{member-id}") //엔드포인트 변경예정
+    @PatchMapping("/{member-id}")
     public ResponseEntity updateMember(@Positive @PathVariable("member-id") long memberId,
                                        @RequestBody MemberPatchDto memberPatchDto) {
         memberPatchDto.setMemberId(memberId);
@@ -54,7 +50,7 @@ public class MemberController {
     /**
      * 수정한 부분 -> 질문, 답변 개수 같이 응답되도록 추가
      */
-    @GetMapping("/findMember/{member-id}") //엔드포인트 변경예정
+    @GetMapping("/{member-id}")
     public ResponseEntity findMember(@Positive @PathVariable("member-id") long memberId) {
         Member member = memberService.findMember(memberId);
 
@@ -73,7 +69,7 @@ public class MemberController {
     }
 
 
-    @DeleteMapping("/deleteMember/{member-id}") //엔드포인트 변경예정
+    @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(@Positive @PathVariable("member-id") long memberId){
         memberService.deleteMember(memberId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
