@@ -113,7 +113,7 @@ public class AnswerController {
     }
 
     // 페이지네이션을 적용하여 조회(질문 번호당)
-    @GetMapping()
+    @GetMapping("/question/{question-id}/answer")
     public ResponseEntity getAnswers(@PathVariable("question-id") long questionId,
                                      @Positive @RequestParam int page,
                                      @Positive @RequestParam int size) {
