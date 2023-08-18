@@ -1,11 +1,11 @@
 import { styled } from "styled-components";
 
 // import Components
-import SocialLogIn from "../components/login/SocialLogin";
-import SignInForm from "../components/singup/SingupForm";
-import SignInFooter from "../components/singup/SingnUpFooter";
-import TextBox from "../components/singup/textContainer";
 import Header from "../components/common/Header";
+import SocialLogIn from "../components/login/SocialLogin";
+import SignInFooter from "../components/signup/SingnUpFooter";
+import SignInForm from "../components/signup/SingupForm";
+import TextBox from "../components/signup/textContainer";
 
 const Container = styled.div`
   height: 100vh;
