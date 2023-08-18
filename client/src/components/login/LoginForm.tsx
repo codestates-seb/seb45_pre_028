@@ -1,8 +1,7 @@
 import { styled } from "styled-components";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { loggedIn } from "../../atoms/atoms";
+import axios from "axios";
 
 const LogInFormComponent = styled.form`
   display: flex;
@@ -62,22 +61,36 @@ const LogInFormComponent = styled.form`
 interface LogInForm {
   email: string;
   password: string;
+  formError: string;
 }
 
 const LoginForm = (): JSX.Element => {
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LogInForm>();
-  const [LogIn, setLogIn] = useRecoilState(loggedIn);
 
   const onValid = async (data: { email: string; password: string }) => {
-    console.log(data);
-    console.log(LogIn);
-    setLogIn(true);
-    navigate("/");
+    const response = await axios.post("/", data);
+    if (!response) {
+      setError("formError", {
+        message: "이메일, 혹은 비밀번호가 올바른지 확인해주십시요",
+      });
+    } else {
+      try {
+        const { accessToken, refreshToken } = response.data;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
+        navigate("/");
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
@@ -98,6 +111,7 @@ const LoginForm = (): JSX.Element => {
       <input {...register("password", { required: "패스워드를 입력해주세요" })}></input>
       {errors ? <span>{errors?.password?.message}</span> : null}
       <button>Log in</button>
+      {errors ? <span>errors?.formError?.message</span> : null}
     </LogInFormComponent>
   );
 };
