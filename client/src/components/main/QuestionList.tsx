@@ -58,9 +58,9 @@ const StyledQuestionList = styled.section`
 `;
 
 const QuestionList = () => {
-  const { fetchData, isLoading, isError, data } = useFetch<Question[]>(
+  const { fetchData, isLoading, isError, data } = useFetch<Question>(
     questionsState,
-    "http://localhost:3001/question",
+    "/question",
   );
 
   useEffect(() => {
