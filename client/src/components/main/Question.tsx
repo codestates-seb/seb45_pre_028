@@ -1,9 +1,14 @@
 import { styled } from "styled-components";
 import { Question } from "../../types/types";
-import { questionsState } from "../../atoms/atoms";
+import { modalState, questionsState } from "../../atoms/atoms";
 import { useFetch } from "../../hooks/useFetch";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { COMMON_CSS } from "../../constants/common_css";
+import { getFormattedDate } from "../../util/date";
+import { useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import axios from "axios";
+import Modal from "../common/Modal";
 const QuestionContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -22,10 +27,12 @@ const QuestionContainer = styled.div`
     margin: 0 1rem;
   }
   .question_user {
-    width: 12.5rem;
-    margin: 0.625rem 0.375rem auto auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   .time {
+    width: 12.5rem;
     margin: 0.0625rem 0 0.25rem 0;
     font-weight: 300;
     font-size: 0.75rem;
@@ -45,6 +52,11 @@ const QuestionContainer = styled.div`
     justify-content: space-between;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid rgb(227, 230, 232);
+    .title-input {
+      height: 2.3rem;
+      width: 30%;
+      font-size: 1.6875rem;
+    }
   }
   .ask-button {
     font-size: 0.8125rem;
@@ -56,14 +68,91 @@ const QuestionContainer = styled.div`
       background: ${COMMON_CSS["button-hover-color"]};
     }
   }
+  .info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .option {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    button {
+      border: 0;
+      background-color: transparent;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: #555;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition:
+        background-color 0.3s,
+        color 0.3s;
+
+      &:hover {
+        background-color: #f2f2f2;
+        color: #222;
+      }
+    }
+  }
+  textarea {
+    max-width: 79rem;
+    width: 100%;
+    resize: none;
+    height: 100%;
+    font-size: 1rem;
+    margin-top: 1rem;
+  }
 `;
 
 function QuestionList() {
-  const { isLoading, isError, data } = useFetch<Question[]>(
-    questionsState,
-    "http://localhost:3001/question",
-  );
+  const modalIsOpen = useRecoilValue<boolean>(modalState);
+  const { id } = useParams();
+  const setModal = useSetRecoilState<boolean>(modalState);
+  const [newContent, setNewContent] = useState<string>("");
+  const [newTitle, setNewTitle] = useState<string>("");
+  const [changeContent, setChangeContent] = useState<boolean>(false);
+  const toggleModal = () => {
+    setModal(!modalIsOpen);
+  };
+  const printState = (createdAt: string, modifiedAt: string): string => {
+    return createdAt === modifiedAt ? "asked" : "modified";
+  };
+  const printDate = (createdAt: string, modifiedAt: string): string => {
+    const date = new Date(createdAt === modifiedAt ? createdAt : modifiedAt).toString();
+    return getFormattedDate(date);
+  };
+  const { fetchData, isLoading, isError, data } = useFetch<Question>(questionsState, "/question");
+  const ChangeContentHandler = () => {
+    setChangeContent(!changeContent);
+  };
+  const deleteHandler = async (questionId: string | undefined) => {
+    try {
+      setNewContent("");
+      await axios.delete(`/question/${questionId}`);
+      await fetchData();
+    } catch (error) {
+      // 에러 처리
+    } finally {
+      toggleModal();
+    }
+  };
+  const patchHandler = async (questionId: number) => {
+    try {
+      await setChangeContent(!changeContent);
 
+      await axios.patch(`/question/${questionId}`, {
+        title: `${newTitle}`,
+        content: `${newContent}`,
+      });
+      await fetchData();
+    } catch (error) {
+      // 에러 처리
+    } finally {
+      setChangeContent(!changeContent);
+    }
+  };
   if (isLoading) {
     return (
       <QuestionContainer>
@@ -79,25 +168,94 @@ function QuestionList() {
       </QuestionContainer>
     );
   }
-  if (data && data.length > 0) {
+  if (data && data.questionData.length > 0) {
     return (
       <QuestionContainer>
-        <div key={data[0].id} className="question_box">
+        <div key={data.questionData[0]?.id} className="question_box">
           <div className="title_box">
-            <div className="title">{data[0].title}</div>
+            {changeContent ? (
+              <textarea
+                className="title-input"
+                placeholder={data.questionData[0]?.title}
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+              ></textarea>
+            ) : (
+              <div className="title">{data.questionData[0]?.title}</div>
+            )}
+
             <Link to="/write" className="ask-button">
               Ask Question
             </Link>
           </div>
-
-          <div className="content">{data[0].content}</div>
+          {changeContent ? (
+            <textarea
+              placeholder={data.questionData[0]?.content}
+              value={newContent}
+              onChange={(e) => setNewContent(e.target.value)}
+            ></textarea>
+          ) : (
+            <div className="content">{data.questionData[0]?.content}</div>
+          )}
           <div className="question_user">
+            {changeContent ? (
+              <div className="option">
+                <button
+                  onClick={() => {
+                    patchHandler(data.questionData[0].questionId);
+                  }}
+                >
+                  Change
+                </button>
+                <button
+                  onClick={() => {
+                    setNewContent("");
+                    return setChangeContent(!changeContent);
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <div className="option">
+                <button
+                  onClick={() => {
+                    ChangeContentHandler();
+                  }}
+                >
+                  Edit
+                </button>
+                <button onClick={() => toggleModal()}>Delete</button>
+              </div>
+            )}
             <div className="time">
-              questioned {data[0].createdAt.slice(2, 10)} {data[0].createdAt.slice(11, 16)}
+              {printState(data.questionData[0]?.createdAt, data.questionData[0]?.modifiedAt)}{" "}
+              {printDate(data.questionData[0]?.createdAt, data.questionData[0]?.modifiedAt)}
             </div>
-            <div className="question_id">{data[0].member_id}</div>
+            {/* <div className="question_id">{data.questionData[0]?.member_id}</div> */}
           </div>
         </div>
+        {modalIsOpen && (
+          <Modal>
+            <>
+              <h1>Confirm Delete</h1>
+              <p>Are you sure you want to discard this answer? This cannot be undone.</p>
+              <div className="button-gap">
+                <button
+                  className="discard-action"
+                  onClick={() => {
+                    deleteHandler(id);
+                  }}
+                >
+                  Discard answer
+                </button>
+                <button className="cancel-action" onClick={() => toggleModal()}>
+                  Cancel
+                </button>
+              </div>
+            </>
+          </Modal>
+        )}
       </QuestionContainer>
     );
   } else {

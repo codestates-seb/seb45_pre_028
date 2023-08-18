@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { styled } from "styled-components";
 import { COMMON_CSS } from "../../constants/common_css";
 import axios from "axios";
-import { AnswerState } from "../../atoms/atoms";
-import { useRecoilValue } from "recoil";
+import { useParams } from "react-router-dom";
 const AnswerInputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -38,22 +37,17 @@ const AnswerInputContainer = styled.div`
   }
 `;
 function AnswerInput() {
-  const [answerText, setAnswerText] = useState("");
-  const AnswerList = useRecoilValue(AnswerState);
+  const [answerText, setAnswerText] = useState<string>("");
+  const { params } = useParams<string>();
 
   const handleAnswerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       const newAnswer = {
-        id: AnswerList.length + 1,
-        answer_id: AnswerList.length + 1,
-        createdAt: new Date().toISOString(),
-        modifiedAt: new Date().toISOString(),
-        member_id: 2,
         content: answerText,
       };
-      await axios.post("http://localhost:3001/answer", newAnswer);
+      await axios.post(`/question/${params}/answer`, newAnswer);
       setAnswerText("");
       window.location.reload();
     } catch (error) {}

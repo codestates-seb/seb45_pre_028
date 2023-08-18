@@ -11,7 +11,7 @@ import styled from "styled-components";
 import { modalState, questionsState } from "../../atoms/atoms";
 import { COMMON_CSS } from "../../constants/common_css";
 import { useFetch } from "../../hooks/useFetch";
-import { Question } from "../../types/types";
+import { QuestionData } from "../../types/types";
 import Modal from "../common/Modal";
 
 const StyledField = styled.div`
@@ -103,12 +103,12 @@ const StyledDiscardButton = styled.button`
 `;
 
 const WriteForm = (): JSX.Element => {
-  const { fetchData } = useFetch(questionsState, "http://localhost:3001/question");
+  const { fetchData } = useFetch(questionsState, "/question");
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
   const setModal = useSetRecoilState(modalState);
   const modalIsOpen = useRecoilValue(modalState);
-  const { register, handleSubmit, reset } = useForm<Question>();
+  const { register, handleSubmit, reset } = useForm<QuestionData>();
 
   const onClickHandler = () => {
     setIsActive(true);
@@ -122,20 +122,18 @@ const WriteForm = (): JSX.Element => {
     }
   };
 
-  const onSubmit = async (data: Question) => {
+  const onSubmit = async (data: QuestionData) => {
     // const editorData = document.querySelector(".js-editor") as HTMLElement;
     // const formData = { ...data, content: editorData.innerHTML };
     // console.log(formData);
 
     data = {
       ...data,
-      createdAt: new Date().toISOString(),
-      modifiedAt: new Date().toISOString(),
-      member_id: 1,
+      // member_id: 1,
     };
 
     try {
-      const response = await axios.post("http://localhost:3001/question", data);
+      const response = await axios.post("/question", data);
       if (response) {
         navigate("/");
         fetchData();

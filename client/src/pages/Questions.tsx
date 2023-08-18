@@ -1,11 +1,11 @@
 import AnswerInput from "../components/main/AnswerInput";
 import AnswerList from "../components/main/AnswerList";
-import QuestionList from "../components/main/Question";
+import Question from "../components/main/Question";
 
 const Questions = (): JSX.Element => {
   return (
     <div>
-      <QuestionList></QuestionList>
+      <Question></Question>
       <AnswerList></AnswerList>
       <AnswerInput></AnswerInput>
     </div>

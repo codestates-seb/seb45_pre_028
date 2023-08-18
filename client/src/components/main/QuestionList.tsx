@@ -58,9 +58,9 @@ const StyledQuestionList = styled.section`
 `;
 
 const QuestionList = () => {
-  const { fetchData, isLoading, isError, data } = useFetch<Question[]>(
+  const { fetchData, isLoading, isError, data } = useFetch<Question>(
     questionsState,
-    "http://localhost:3001/question",
+    "/question",
   );
 
   useEffect(() => {
@@ -72,7 +72,7 @@ const QuestionList = () => {
   };
 
   const printDate = (createdAt: string, modifiedAt: string): string => {
-    const date = new Date(createdAt === modifiedAt ? createdAt : modifiedAt);
+    const date = createdAt === modifiedAt ? createdAt : modifiedAt;
     return getFormattedDate(date);
   };
 
@@ -82,20 +82,20 @@ const QuestionList = () => {
       {isError && <div>문제가 발생했습니다.</div>}
       {!isLoading && (
         <ul>
-          {data.map((question) => (
-            <li key={question.id}>
+          {data.questionData.map((question) => (
+            <li key={question.questionId}>
               {/* <div className="count">
                 <span className="answers-count">0 answers</span>
                 <span className="views">0 views</span>
               </div> */}
               <h3>
-                <Link to={`/questions/${question.id}`} className="question-title">
+                <Link to={`/questions/${question.questionId}`} className="question-title">
                   {question.title}
                 </Link>
               </h3>
               <p className="summary">{question.content}</p>
               <div className="user">
-                <span className="id">{question.member_id}</span>
+                <span className="id">{/*question.member_id*/}작성자</span>
                 <span className="activity">
                   {printState(question.createdAt, question.modifiedAt)}
                 </span>

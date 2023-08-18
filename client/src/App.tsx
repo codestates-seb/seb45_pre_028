@@ -6,6 +6,8 @@ import Main from "./pages/Main";
 import Questions from "./pages/Questions";
 import RootLayout from "./pages/Root";
 import Write from "./pages/Write";
+import LogIn from "./pages/Login";
+import SignUp from "./pages/Signup";
 
 function App() {
   const routes: RouteObject[] = [
@@ -22,6 +24,14 @@ function App() {
           element: <Questions />,
         },
       ],
+    },
+    {
+      path: "/login",
+      element: <LogIn />,
+    },
+    {
+      path: "/sign",
+      element: <SignUp />,
     },
     {
       path: "/write",

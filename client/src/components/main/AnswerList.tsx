@@ -2,10 +2,12 @@ import { useState } from "react";
 import axios from "axios";
 import { styled } from "styled-components";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { AnswerState, modalState } from "../../atoms/atoms";
+import { answerState, modalState } from "../../atoms/atoms";
 import { useFetch } from "../../hooks/useFetch";
 import Modal from "../common/Modal";
-import { Answer } from "../../types/types";
+import { Answer, AnswerData } from "../../types/types";
+import { useParams } from "react-router-dom";
+import { getFormattedDate } from "../../util/date";
 
 const AnswerContainer = styled.div`
   display: flex;
@@ -56,8 +58,6 @@ const AnswerContainer = styled.div`
 
   .answer_user {
     width: 12.5rem;
-    margin: 0.625rem 0.375rem auto auto;
-
     .time {
       margin: 0.0625rem 0 0.25rem 0;
       font-weight: 300;
@@ -69,32 +69,43 @@ const AnswerContainer = styled.div`
       font-size: 0.8125rem;
     }
   }
-
   .answer_box {
     padding: 1rem 0;
     border-bottom: 1px solid rgb(227, 230, 232);
     max-width: 79rem;
   }
+  textarea {
+    max-width: 79rem;
+    width: 100%;
+    resize: none;
+    height: 5rem;
+    font-size: 1rem;
+  }
 `;
 
 function AnswerList() {
-  const modalIsOpen = useRecoilValue(modalState);
-  const setModal = useSetRecoilState(modalState);
+  const modalIsOpen = useRecoilValue<boolean>(modalState);
+  const setModal = useSetRecoilState<boolean>(modalState);
+  const { id } = useParams();
+  const [newContent, setNewContent] = useState<string>("");
   const [deletePendingId, setDeletePendingId] = useState<number | null>(null);
-  const { fetchData, isLoading, isError, data } = useFetch<Answer[]>(
-    AnswerState,
-    "http://localhost:3001/answer",
+  const { fetchData, isLoading, isError, data } = useFetch<Answer>(
+    answerState,
+    `/answer`, // 서버 되면 /question/${id}/answer
   );
-
+  const [changeContent, setChangeContent] = useState<boolean[]>(
+    new Array(data.answerData?.length + 1).fill(false),
+  );
   const toggleModal = (id: number | null = null) => {
     setDeletePendingId(id);
     setModal(!modalIsOpen);
   };
 
-  const deleteHandler = async (id: number) => {
+  const deleteHandler = async (answerId: number) => {
     try {
-      setDeletePendingId(id);
-      await axios.delete(`http://localhost:3001/answer/${id}`);
+      setDeletePendingId(answerId);
+      setNewContent("");
+      await axios.delete(`/question/${id}/answer/${answerId}`);
       await fetchData();
     } catch (error) {
       // 에러 처리
@@ -102,6 +113,33 @@ function AnswerList() {
       setDeletePendingId(null);
       toggleModal();
     }
+  };
+
+  const patchHandler = async (answerId: number) => {
+    try {
+      await setChangeContent(new Array(data.answerData?.length + 1).fill(false));
+
+      await axios.patch(`/question/${id}/answer/${answerId}`, {
+        content: `${newContent}`,
+      });
+      await fetchData();
+    } catch (error) {
+      // 에러 처리
+    } finally {
+      setChangeContent(new Array(data.answerData?.length + 1).fill(false));
+    }
+  };
+  const printState = (createdAt: string, modifiedAt: string): string => {
+    return createdAt === modifiedAt ? "answered" : "modified";
+  };
+  const printDate = (createdAt: string, modifiedAt: string): string => {
+    const date = new Date(createdAt === modifiedAt ? createdAt : modifiedAt).toString();
+    return getFormattedDate(date);
+  };
+  const ChangeContentHandler = (id: number) => {
+    const newArray = changeContent.slice();
+    newArray[id] = true;
+    setChangeContent(newArray);
   };
 
   if (isLoading) {
@@ -115,25 +153,62 @@ function AnswerList() {
   return (
     <AnswerContainer>
       <div>
-        {data && <h2>{data.length} Answer</h2>}
-        {data &&
-          data.map((x: Answer) => (
-            <div key={x.answer_id} className="answer_box">
-              <div className="content">{x.content}</div>
-              <div className="info">
+        {<h2>{data.answerData?.length} Answer</h2>}
+        {data.answerData?.map((item: AnswerData) => (
+          <div key={item.answerId} className="answer_box">
+            {changeContent[item.answerId] ? (
+              <textarea
+                placeholder={item.content}
+                value={newContent}
+                onChange={(e) => setNewContent(e.target.value)}
+              ></textarea>
+            ) : (
+              <div className="content">{item.content}</div>
+            )}
+            <div className="info">
+              {changeContent[item.answerId] ? (
                 <div className="option">
-                  <button onClick={() => {}}>Edit</button>
-                  <button onClick={() => toggleModal(x.answer_id)}>Delete</button>
+                  <button
+                    onClick={() => {
+                      patchHandler(item.answerId);
+                    }}
+                  >
+                    Change
+                  </button>
+                  <button
+                    onClick={() => {
+                      setNewContent("");
+                      const newArray = changeContent.slice();
+                      newArray[item.answerId] = false;
+                      setChangeContent(newArray);
+                      return setChangeContent(newArray);
+                    }}
+                  >
+                    Cancel
+                  </button>
                 </div>
-                <div className="answer_user">
-                  <div className="time">
-                    answered {x.createdAt.slice(2, 10)} {x.createdAt.slice(11, 16)}
-                  </div>
-                  <div className="answer_id">{x.member_id}</div>
+              ) : (
+                <div className="option">
+                  <button
+                    onClick={() => {
+                      ChangeContentHandler(item.answerId);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button onClick={() => toggleModal(item.answerId)}>Delete</button>
                 </div>
+              )}
+              <div className="answer_user">
+                <div className="time">
+                  {printState(item.createdAt, item.modifiedAt)}{" "}
+                  {printDate(item.createdAt, item.modifiedAt)}
+                </div>
+                {/* <div className="answer_id">{item.member_id}</div> */}
               </div>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
       {modalIsOpen && (
         <Modal>

@@ -1,16 +1,28 @@
 import { atom } from "recoil";
 import { Answer, Question } from "../types/types";
 
-export const questionsState = atom<Question[]>({
+export const questionsState = atom<Question>({
   key: "questionsState",
-  default: [],
+  default: {
+    questionData: [],
+    pageInfo: [],
+  },
+});
+
+export const answerState = atom<Answer>({
+  key: "answerState",
+  default: {
+    answerData: [],
+    pageInfo: [],
+  },
 });
 
 export const modalState = atom<boolean>({
   key: "modalState",
   default: false,
 });
-export const AnswerState = atom<Answer[]>({
-  key: "AnswerState",
-  default: [],
+
+export const loggedIn = atom({
+  key: "loggedIn",
+  default: false,
 });
