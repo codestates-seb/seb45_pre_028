@@ -5,7 +5,7 @@ export const questionsState = atom<Question>({
   key: "questionsState",
   default: {
     questionData: [],
-    pageInfo: [],
+    pageInfo: { page: 1, size: 10, totalElements: 0, totalPages: 0 },
   },
 });
 

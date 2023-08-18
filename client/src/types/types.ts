@@ -1,9 +1,10 @@
 export interface Question {
   questionData: QuestionData[];
-  pageInfo: PageInfo[];
+  pageInfo: PageInfo;
 }
 
 export interface QuestionData {
+  id?: string;
   questionId: number;
   title: string;
   content: string;
@@ -13,10 +14,11 @@ export interface QuestionData {
 
 export interface Answer {
   answerData: AnswerData[];
-  pageInfo: PageInfo[];
+  pageInfo: PageInfo;
 }
 
 export interface AnswerData {
+  id?: string;
   questionId: number;
   content: string;
   createdAt: string;
