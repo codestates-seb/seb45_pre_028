@@ -51,4 +51,5 @@ public class Member {
         if(answer.getMember() != this){
             answer.setMember(this);
         }
+    }    
 }
