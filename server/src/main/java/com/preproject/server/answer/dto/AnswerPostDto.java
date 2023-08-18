@@ -13,12 +13,12 @@ import java.time.LocalDateTime;
 @Getter
 public class AnswerPostDto { // 답변 등록 시 필요한 데이터
 
-//    // 답변할 질문
-//    private Long questionId;
-//
-//
-//    // 답변할 사용자
-//    private Long memberId;
+    // 답변할 질문
+    private Long questionId;
+
+
+    // 답변할 사용자
+    private Long memberId;
 
 
     // 답변 내용 ( 최소 글자수 제한 )

@@ -1,5 +1,7 @@
 package com.preproject.server.question.entity;
 
+import com.preproject.server.answer.entity.Answer;
+import com.preproject.server.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +10,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 @Getter
@@ -39,13 +43,24 @@ public class Question {
     private LocalDateTime modifiedAt;
 
 
-//    @ManyToOne
-//    @JoinColumn(name = "MEMBER_ID") // 테이블명
-//    private Member member;
-//
-//    @OneToMany(mappedBy = "question")
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID") // 테이블명
+    private Member member;
+
+    /**
+     * 기존 코드
+     */
+//    @OneToOne(mappedBy = "question")
 //    private Answer answer;
-//
+
+    /**
+     *  추가한 부분
+     */
+
+    // 한 개의 질문에 여러 개의 답변을 달 수 있음
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    private final List<Answer> answers = new ArrayList<>();
+
 
     // Member 엔티티에 추가할 매핑 (참고)
     // @OneToMany(mappedby = "member")
@@ -66,6 +81,19 @@ public class Question {
         }
     }
 
+    /**
+     *
+     * 추가한 부분
+     */
+
+    // 양방향 관계 설정. Question 객체에 답변을 추가
+    public void setAnswer(Answer answer) {
+        this.answers.add(answer);
+        if(answer.getQuestion() != this){
+            answer.setQuestion(this);
+        }
+
+    }
 
 
 }

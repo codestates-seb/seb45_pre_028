@@ -1,11 +1,15 @@
 package com.preproject.server.member.entity;
 
+import com.preproject.server.answer.entity.Answer;
+import com.preproject.server.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -30,4 +34,20 @@ public class Member {
 
     @Column(nullable = false)
     private LocalDateTime modifiedAt = LocalDateTime.now();
+
+
+    /**
+     * 추가한 부분
+     */
+    // 회원과 답변 양방향 관계 설정
+    @OneToMany(mappedBy = "member")
+    private List<Answer> answers = new ArrayList<>();
+
+    // 답변과 멤버 양방향 관계 설정
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+        if(answer.getMember() != this){
+            answer.setMember(this);
+        }
+    }
 }
