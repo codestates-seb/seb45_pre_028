@@ -4,7 +4,6 @@ import com.preproject.server.auth.jwt.JwtTokenizer;
 import com.preproject.server.auth.utils.CustomAuthorityUtils;
 import com.preproject.server.member.entity.Member;
 import com.preproject.server.member.repository.MemberRepository;
-import com.preproject.server.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;

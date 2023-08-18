@@ -13,6 +13,6 @@ public class MemberResponseDto {
     private String email;
     private String name;
     private String password;
-    private LocalDateTime createdAt;
-    private LocalDateTime modifiedAt;
+    private long questionCount;
+    private long answerCount;
 }

@@ -41,14 +41,14 @@ public class Member {
     @Column(nullable = false)
     private LocalDateTime modifiedAt = LocalDateTime.now();
 
-//    @OneToMany(mappedBy = "member")
-//    private List<Question> Questions = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private List<Answer> answers = new ArrayList<>();
 
-//      @OneToMany(mappedBy = "member")
-//    private List<Answer> answers = new ArrayList<>();
+    // 답변과 멤버 양방향 관계 설정
+    public void addAnswer(Answer answer) {
+        answers.add(answer);
+        if(answer.getMember() != this){
+            answer.setMember(this);
+        }
 
-    public enum MemberRole {
-        ROLE_USER,
-        ROLE_ADMIN
-    }
 }
