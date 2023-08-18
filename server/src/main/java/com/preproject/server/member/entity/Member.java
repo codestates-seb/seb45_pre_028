@@ -1,14 +1,12 @@
 package com.preproject.server.member.entity;
 
+import com.preproject.server.answer.entity.Answer;
+import com.preproject.server.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,18 +20,14 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long memberId;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false,unique = true)
     private String email;
 
-    @Column
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false)
-    @Size(max = 12)
     private String name;
-
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
 
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -51,5 +45,5 @@ public class Member {
         if(answer.getMember() != this){
             answer.setMember(this);
         }
-    }    
+    }
 }
