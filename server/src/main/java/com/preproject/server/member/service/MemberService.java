@@ -1,20 +1,19 @@
 package com.preproject.server.member.service;
 
-import com.preproject.server.answer.repository.AnswerRepository;
+import com.preproject.server.auth.utils.CustomAuthorityUtils;
+import com.preproject.server.exception.BusinessLogicException;
+import com.preproject.server.exception.ExceptionCode;
 import com.preproject.server.member.entity.Member;
 import com.preproject.server.member.repository.MemberRepository;
-import com.preproject.server.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Transactional
 @RequiredArgsConstructor
 @Service
 @Transactional
