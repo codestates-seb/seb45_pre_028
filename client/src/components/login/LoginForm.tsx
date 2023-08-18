@@ -1,9 +1,7 @@
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
 import { styled } from "styled-components";
-import { loggedIn } from "../../atoms/atoms";
 
 const LogInFormComponent = styled.form`
   display: flex;
@@ -63,22 +61,36 @@ const LogInFormComponent = styled.form`
 interface LogInForm {
   username: string;
   password: string;
+  formError: string;
 }
 
 const LoginForm = (): JSX.Element => {
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LogInForm>();
-  const [LogIn, setLogIn] = useRecoilState(loggedIn);
 
-  const onValid = async (data: LogInForm) => {
-    console.log(data);
-    console.log(LogIn);
-    setLogIn(true);
-    navigate("/");
+  const onValid = async (data: { email: string; password: string }) => {
+    const response = await axios.post("/", data);
+    if (!response) {
+      setError("formError", {
+        message: "이메일, 혹은 비밀번호가 올바른지 확인해주십시요",
+      });
+    } else {
+      try {
+        const { accessToken, refreshToken } = response.data;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+
+        navigate("/");
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   const onSubmit = async (data: LogInForm) => {
@@ -96,7 +108,7 @@ const LoginForm = (): JSX.Element => {
   };
 
   return (
-    <LogInFormComponent onSubmit={handleSubmit(onValid)}>
+    <LogInFormComponent onSubmit={handleSubmit(onSubmit)}>
       <div>Email</div>
       <input {...register("username", { required: "이메일을 입력해주세요" })}></input>
       {errors ? <span>{errors?.username?.message}</span> : null}
@@ -112,7 +124,8 @@ const LoginForm = (): JSX.Element => {
       </div>
       <input {...register("password", { required: "패스워드를 입력해주세요" })}></input>
       {errors ? <span>{errors?.password?.message}</span> : null}
-      <button onClick={handleSubmit(onSubmit)}>Log in</button>
+      <button>Log in</button>
+      {errors ? <span>errors?.formError?.message</span> : null}
     </LogInFormComponent>
   );
 };
