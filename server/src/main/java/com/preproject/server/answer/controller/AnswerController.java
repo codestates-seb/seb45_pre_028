@@ -5,12 +5,9 @@ import com.preproject.server.answer.entity.Answer;
 import com.preproject.server.answer.mapper.AnswerMapper;
 import com.preproject.server.answer.service.AnswerService;
 import com.preproject.server.auth.userDetails.LoginMemberIdResolver;
-import com.preproject.server.question.entity.Question;
-import com.preproject.server.question.service.QuestionService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,20 +50,18 @@ public class AnswerController {
     }
 
     // 답변 수정 (답변 id를 통해서 조회 후 수정)
-    @PatchMapping("/question/{question-id}/answer/{answer-id}")
-    public ResponseEntity patchAnswer(@PathVariable("question-id") long questionId,
-                                      @PathVariable("answer-id") long answerId,
+    @PatchMapping("/question/answer/{answer-id}")
+    public ResponseEntity patchAnswer(@PathVariable("answer-id") long answerId,
                                       @Valid @RequestBody AnswerPatchDto answerPatchDto) {
 
 
-//        // 수정할 답변을 찾기
-//        Answer updateAnswerId = new Answer();
-//        updateAnswerId.setAnswerId(answerId);
 
-        answerPatchDto.setAnswerId(answerId);
+        // 수정할 답변을 찾기
+        Answer updateAnswerId = new Answer();
+        updateAnswerId.setAnswerId(answerId);
 
         // 수정한 답변의 내용을 response에 저장
-        Answer response = answerService.updateAnswer(answerMapper.answerPatchDtoToanswer(answerPatchDto), answerPatchDto.getContent());
+        Answer response = answerService.updateAnswer(updateAnswerId, answerPatchDto.getContent());
 
         return new ResponseEntity<>(answerMapper.answerToAnswerResponseDto(response), HttpStatus.OK);
 
@@ -91,11 +86,10 @@ public class AnswerController {
     }
 
     // 답변 삭제 (질문id에서 먼저 조회 후 답변 id를 통해서 삭제)
-    @DeleteMapping("/question/{question-id}/answer/{answer-id}")
-    public ResponseEntity deleteAnswer(@PathVariable("question-id") long questionId,
-                                       @PathVariable("answer-id") long answerId) {
+    @DeleteMapping("/question/answer/{answer-id}")
+    public ResponseEntity deleteAnswer(@PathVariable("answer-id") long answerId) {
 
-        // 수정할 답변을 찾기
+        // 삭제할 답변을 찾기
         Answer deleteAnswerId = new Answer();
         deleteAnswerId.setAnswerId(answerId);
 

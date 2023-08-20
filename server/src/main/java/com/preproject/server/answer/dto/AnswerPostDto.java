@@ -28,9 +28,6 @@ public class AnswerPostDto { // 답변 등록 시 필요한 데이터
     @Size(min = 2, max = 200 , message = " 답변 내용은 2글자 이상 입력하세요.")
     private String content;
 
-    public void addMemberId(long memberId) {
-        this.memberId = memberId;
-    }
 
     public void addEmail(String email) {
         this.email = email;

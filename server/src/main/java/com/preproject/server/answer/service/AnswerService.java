@@ -72,9 +72,8 @@ public class AnswerService {
         questionService.verifyAccess(answerEmail, LoginMemberIdResolver.getLoginMemberEmail());
 
         // 질문 ID를 이용해서 질문 찾기
-        Question question = questionService.findQuestion(answer.getQuestion().getQuestionId());
-//        Long questionId = questionService.findQuestion(answer.getQuestion().getQuestionId()).getQuestionId();
-        Long findanswerId = answer.getQuestion().getQuestionId();
+        Question question = questionService.findQuestion(findanswer.getQuestion().getQuestionId());
+        Long findanswerId = findanswer.getQuestion().getQuestionId();
 
         if (question.getQuestionId().equals(findanswerId)) {
 
@@ -106,18 +105,21 @@ public class AnswerService {
 
     public void deleteAnswer(Long answerId) {
 
-        // 질문 검증
+        // 회원 검증
         Answer findanswer = findAnswerById(answerId);
         String answerEmail = findanswer.getMember().getEmail();
 
         // 회원 = 질문
         questionService.verifyAccess(answerEmail, LoginMemberIdResolver.getLoginMemberEmail());
-//        // 삭제할 답변 조회
-//        Answer findanswer = findAnswerById(answerId);
 
-        answerRepository.deleteById(findanswer.getAnswerId());
-    }
+//        // 질문 ID를 이용해서 질문 찾기
+//        Question question = questionService.findQuestion(findanswer.getQuestion().getQuestionId());
+//        Long findanswerId = findanswer.getQuestion().getQuestionId();
 
+//        if (question.getQuestionId().equals(findanswerId)) {
+
+            answerRepository.deleteById(findanswer.getAnswerId());
+        }
 
     // 답변 조회
     public Answer findAnswerById(Long answerId) {
