@@ -70,5 +70,4 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
 //    Exception 코드 작성 후 예외처리 해야함
     }
-    
 }

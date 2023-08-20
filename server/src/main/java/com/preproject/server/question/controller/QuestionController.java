@@ -1,6 +1,7 @@
 package com.preproject.server.question.controller;
 
 import com.preproject.server.answer.entity.Answer;
+import com.preproject.server.auth.userDetails.LoginMemberIdResolver;
 import com.preproject.server.member.entity.Member;
 import com.preproject.server.question.dto.*;
 import com.preproject.server.question.entity.Question;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping() // url 개별 설정
+@RequestMapping("/question") // url 개별 설정
 @Validated
 public class QuestionController {
     private final QuestionService questionService;
@@ -33,17 +34,19 @@ public class QuestionController {
     /**
      * 엔드포인트에 member-id를 넣었고 @PathVariable에 memberId 추가
      */
-    @PostMapping("/{member-id}/question") // 엔드포인트를 답변이랑
-    public ResponseEntity postQuestion(@Positive @PathVariable("member-id") long memberId,
-                                       @Valid @RequestBody QuestionPostDto questionPostDto) {
+    @PostMapping() // 엔드포인트를 답변이랑
+    public ResponseEntity postQuestion(@Valid @RequestBody QuestionPostDto questionPostDto) {
 
-        // 질문을 등록할 멤버 찾기
-        Member findmember = questionService.findMemberById(memberId);
+        // 사용자 정보 조회
+        questionPostDto.addEmail(LoginMemberIdResolver.getLoginMemberEmail());
+
+//        // 질문을 등록할 멤버 찾기
+//        Member findmember = questionService.findMemberById(memberId);
 
         Question question = mapper.questionPostDtoToQuestion(questionPostDto);
 
-        // 회원과 질문을 연결
-        question.setMember(findmember);
+//        // 회원과 질문을 연결
+//        question.setMember(findmember);
 
         Question response = questionService.createQuestion(question);
 
@@ -52,7 +55,7 @@ public class QuestionController {
 
     }
 
-    @PatchMapping("/question/{question-id}")
+    @PatchMapping("/{question-id}")
     public ResponseEntity patchQuestion(@Positive @PathVariable("question-id") long questionId,
                                         @Valid @RequestBody QuestionPatchDto questionPatchDto) {
         questionPatchDto.setQuestionId(questionId);
@@ -62,14 +65,14 @@ public class QuestionController {
         return new ResponseEntity(mapper.questionToQuestionResponseDto(response), HttpStatus.OK);
     }
 
-    @GetMapping("/question/{question-id}")
+    @GetMapping("/{question-id}")
     public ResponseEntity getQuestion(@Positive @PathVariable("question-id") long questionId) {
         Question response = questionService.findQuestion(questionId);
         return new ResponseEntity(mapper.questionToQuestionResponseDto(response), HttpStatus.OK);
     }
 
     // 페이지네이션을 적용하여 조회
-    @GetMapping("/question")
+    @GetMapping()
     public ResponseEntity getQuestions(@Positive @RequestParam int page,
                                        @Positive @RequestParam int size) {
 
@@ -85,7 +88,7 @@ public class QuestionController {
     }
 
 
-    @DeleteMapping("/question/{question-id}")
+    @DeleteMapping("/{question-id}")
     public ResponseEntity deleteQuestion(@PathVariable("question-id") long questionId) {
         System.out.println(" # delete Question");
         questionService.deleteQuestion(questionId);

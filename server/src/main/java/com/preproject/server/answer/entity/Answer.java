@@ -40,8 +40,6 @@ public class Answer {
 
 
     // 답변id
-    // @Setter(AccessLevel.NONE)로 해당 필드에 대해서만 Setter 메서드를 생성하지 않도록 지정 -> 변하면 안되는 값이기 때문
-    @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;

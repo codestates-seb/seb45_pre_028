@@ -16,10 +16,9 @@ public class QuestionPostDto {
     @NotBlank
     private String content;
 
+    private String  email;
 
-//    private long memberId;
-//
-//    public void addMemberId(long memberId) {
-//        this.memberId= memberId;
-//    }
+    public void addEmail(String email) {
+        this.email = email;
+    }
 }

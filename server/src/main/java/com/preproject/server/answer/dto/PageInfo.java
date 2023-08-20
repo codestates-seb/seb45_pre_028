@@ -10,5 +10,4 @@ public class PageInfo {
     private int size; // 페이지 개수(low)
     private int totalElements; // 테이블에 저장되어 있는 데이터의 총 개수
     private int totalPages; // 총 페이지 수
-
 }

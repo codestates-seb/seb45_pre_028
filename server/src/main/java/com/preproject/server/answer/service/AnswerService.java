@@ -2,6 +2,8 @@ package com.preproject.server.answer.service;
 
 import com.preproject.server.answer.entity.Answer;
 import com.preproject.server.answer.repository.AnswerRepository;
+import com.preproject.server.exception.BusinessLogicException;
+import com.preproject.server.exception.ExceptionCode;
 import com.preproject.server.member.entity.Member;
 import com.preproject.server.member.repository.MemberRepository;
 import com.preproject.server.member.service.MemberService;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -30,9 +33,8 @@ public class AnswerService {
     private final MemberService memberService;
 
 
-
     public AnswerService(AnswerRepository answerRepository, MemberService memberService,
-                         QuestionService questionService, QuestionRepository questionRepository,MemberRepository memberRepository) {
+                         QuestionService questionService, QuestionRepository questionRepository, MemberRepository memberRepository) {
         this.answerRepository = answerRepository;
         this.memberService = memberService;
         this.questionService = questionService;
@@ -41,53 +43,40 @@ public class AnswerService {
     }
 
     //     답변 등록
-    public Answer createAnswer(Answer answer, long questionId, long memberId) {
+    public Answer createAnswer(Answer answer, long questionId, String email) {
 
-//        // 존재하는 회원인지 확인
-//        memberService.findVerifiedMember(answer.getMember().getMemberId());
-//
-//        Question findQuestion = questionService.findQuestion(answer.getQuestion().getQuestionId());
-//
-//        answer.setQuestion(findQuestion);
-
-        // 주어진 Answer 객체에서 회원 정보와 질문 정보 가져오기
-//        Member verifiedMember = memberService.findVerifiedMember(answer.getMember().getMemberId());
 
         // 질문 ID를 이용해서 질문 찾기
         Question question = questionService.findQuestionById(questionId);
 
-        // 회원 ID를 이용해서 회원 찾기
-        Member member = memberService.findVerifiedMember(memberId);
+//        // 회원 ID를 이용해서 회원 찾기
+//        Member member = memberService.findVerifiedMember(member.);
 
         // 답변 엔티티에 질문과 회원정보 설정
         answer.setQuestion(question);
-        answer.setMember(member);
+//        answer.setMember(member);
 
         // 설정된 답변 엔티티를 저장하고 반환
         return answerRepository.save(answer);
     }
 
-
     // 답변 수정
-    public Answer updateAnswer(Answer answer) {
+    public Answer updateAnswer(Answer answer, String content) {
 
+        // 답변 찾기
+        Answer findanswer = findAnswerById(answer.getAnswerId());
 
-      Answer findanswer = findAnswerById(answer.getAnswerId());
-
-//         답변 내용 업데이트
-        Optional.ofNullable(answer.getContent())
-                .ifPresent(content -> findanswer.setContent(content));
-
+        // 답변 내용 업데이트
+        if (content != null) {
+            findanswer.setContent(content);
+        }
 
         return answerRepository.save(findanswer);
     }
 
-    public Answer findAnswer(Long answerId) {
-        return findAnswerById(answerId);
-    }
 
-    // 답변 조회(페이지네이션 구현)
     public Page<Answer> findAnswers(int page, int size, long questionId) { // page, size를 매개변수로 멤버를 조회
+        // 답변 조회(페이지네이션 구현)
 
         Question question = questionService.findQuestionById(questionId);
 
@@ -99,18 +88,23 @@ public class AnswerService {
         Page<Answer> answerPage = answerRepository.findByQuestion(question, pageRequest);
 
         return answerPage;
+
     }
 
     public void deleteAnswer(Long answerId) {
-        answerRepository.deleteById(answerId);
+
+        // 삭제할 답변 조회
+        Answer findanswer = findAnswerById(answerId);
+
+        answerRepository.deleteById(findanswer.getAnswerId());
     }
 
 
     // 답변 조회
     public Answer findAnswerById(Long answerId) {
         Optional<Answer> optionalAnswer = answerRepository.findById(answerId);
-        Answer answer = optionalAnswer.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return  answer;
+        Answer answer = optionalAnswer.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return answer;
     }
 
     /**
@@ -133,17 +127,29 @@ public class AnswerService {
         return answerCount;
     }
 
-    // 회원 조회
+    // 회원 조회(Id로 확인)
     public Member findMemberById(Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
-        Member member = optionalMember.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        Member member = optionalMember.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         return member;
     }
-//
-//    // 질문 조회
-//    public Question findQuestionById(Long questionId) {
-//        Optional<Question> optionalQuestion = questionRepository.findById(questionId);
-//        Question question = optionalQuestion.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-//        return question;
-//    }
+
+    // 회원 존재 여부 확인 메서드(이메일)
+    private Member memberOrException(String email) {
+        return memberRepository.findByEmail(email).orElseThrow(() ->
+                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+    }
+
 }
+
+
+//    public Answer findAnswer(Long answerId) {return findAnswerById(answerId);}
+//        // 존재하는 회원인지 확인
+//        memberService.findVerifiedMember(answer.getMember().getMemberId());
+//
+//        Question findQuestion = questionService.findQuestion(answer.getQuestion().getQuestionId());
+//
+//        answer.setQuestion(findQuestion);
+
+// 주어진 Answer 객체에서 회원 정보와 질문 정보 가져오기
+//        Member verifiedMember = memberService.findVerifiedMember(answer.getMember().getMemberId());

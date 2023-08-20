@@ -43,6 +43,10 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Answer> answers = new ArrayList<>();
 
+    @OneToMany(mappedBy = "member")
+    private List<Question> questions = new ArrayList<>();
+
+
     // 답변과 멤버 양방향 관계 설정
     public void addAnswer(Answer answer) {
         answers.add(answer);
@@ -50,6 +54,15 @@ public class Member {
             answer.setMember(this);
         }
     }
+
+    // 질문과 양방향 관계 설정
+    public void addQuestion(Question question) {
+        questions.add(question);
+        if(question.getMember() != this) {
+            question.setMember(this);
+        }
+    }
+
     public enum MEMBER_ROLE{
         ROLE_ADMIN,
         ROLE_USER;

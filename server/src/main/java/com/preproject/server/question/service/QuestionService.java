@@ -77,24 +77,24 @@ public class QuestionService {
         return question;
     }
 
-    /**
-     * 회원이 질문한 개수 카운트해주는 메서드 추가 + 회원 findMemberById 메서드
-     */
-    public int countQuestionsByMemberId(long memberId) {
-        // 회원 ID로 Member 객체를 가져온다.
-        Member member = findMemberById(memberId);
-
-        // 해당 회원이 작성한 질문의 개수를 센다.
-        int questionCount = 0;
-        List<Question> questions = questionRepository.findAll();
-        for (Question question : questions) {
-            if (question.getMember().equals(member)) {
-                questionCount++;
-            }
-        }
-
-        return questionCount;
-    }
+//    /**
+//     * 회원이 질문한 개수 카운트해주는 메서드 추가 + 회원 findMemberById 메서드
+//     */
+//    public int countQuestionsByMemberId(long memberId) {
+//        // 회원 ID로 Member 객체를 가져온다.
+//        Member member = findMemberById(memberId);
+//
+//        // 해당 회원이 작성한 질문의 개수를 센다.
+//        int questionCount = 0;
+//        List<Question> questions = questionRepository.findAll();
+//        for (Question question : questions) {
+//            if (question.getMember().equals(member)) {
+//                questionCount++;
+//            }
+//        }
+//
+//        return questionCount;
+//    }
 
         // 회원 조회
     public Member findMemberById(Long memberId) {

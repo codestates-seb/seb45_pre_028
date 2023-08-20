@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +55,7 @@ public class Question {
 //    private Answer answer;
 
     /**
-     *  추가한 부분
+     * 추가한 부분
      */
 
     // 한 개의 질문에 여러 개의 답변을 달 수 있음
@@ -65,7 +66,6 @@ public class Question {
     // Member 엔티티에 추가할 매핑 (참고)
     // @OneToMany(mappedby = "member")
     //private List<Order> orders = new ArrayList();
-
 
 
     public enum QuestionStatus {
@@ -82,18 +82,25 @@ public class Question {
     }
 
     /**
-     *
      * 추가한 부분
      */
 
     // 양방향 관계 설정. Question 객체에 답변을 추가
     public void setAnswer(Answer answer) {
         this.answers.add(answer);
-        if(answer.getQuestion() != this){
+        if (answer.getQuestion() != this) {
             answer.setQuestion(this);
         }
 
     }
 
+    // 멤버 참조 양방향 관계 설정
+    public void setMember(Member member) {
+        this.member = member;
+        if (!member.getQuestions().contains(this)) {
+            member.getQuestions().add(this);
+        }
+    }
 
 }
+
