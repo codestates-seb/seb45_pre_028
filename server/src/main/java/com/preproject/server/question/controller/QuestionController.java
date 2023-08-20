@@ -39,17 +39,8 @@ public class QuestionController {
 
         // 사용자 정보 조회
         questionPostDto.addEmail(LoginMemberIdResolver.getLoginMemberEmail());
-
-//        // 질문을 등록할 멤버 찾기
-//        Member findmember = questionService.findMemberById(memberId);
-
         Question question = mapper.questionPostDtoToQuestion(questionPostDto);
-
-//        // 회원과 질문을 연결
-//        question.setMember(findmember);
-
-        Question response = questionService.createQuestion(question);
-
+        Question response = questionService.createQuestion(question, LoginMemberIdResolver.getLoginMemberEmail());
 
         return new ResponseEntity(mapper.questionToQuestionResponseDto(response), HttpStatus.CREATED);
 
@@ -58,6 +49,8 @@ public class QuestionController {
     @PatchMapping("/{question-id}")
     public ResponseEntity patchQuestion(@Positive @PathVariable("question-id") long questionId,
                                         @Valid @RequestBody QuestionPatchDto questionPatchDto) {
+        // 사용자 정보 조회
+        questionPatchDto.addEmail(LoginMemberIdResolver.getLoginMemberEmail());
         questionPatchDto.setQuestionId(questionId);
         Question question = mapper.questionPatchDtoToQuestion(questionPatchDto);
         Question response = questionService.updateQuestion(question);
@@ -91,6 +84,8 @@ public class QuestionController {
     @DeleteMapping("/{question-id}")
     public ResponseEntity deleteQuestion(@PathVariable("question-id") long questionId) {
         System.out.println(" # delete Question");
+        // 사용자 정보 조회
+        String loginMemberEmail = LoginMemberIdResolver.getLoginMemberEmail();
         questionService.deleteQuestion(questionId);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

@@ -70,4 +70,11 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
 //    Exception 코드 작성 후 예외처리 해야함
     }
+
+    // 존재하는 멤버인지 확인하는 메서드(Email)
+    public Member findVerifiedMemberByEmail(String email) {
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        return findMember;
+    }
 }

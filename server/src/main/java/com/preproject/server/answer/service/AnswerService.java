@@ -2,6 +2,7 @@ package com.preproject.server.answer.service;
 
 import com.preproject.server.answer.entity.Answer;
 import com.preproject.server.answer.repository.AnswerRepository;
+import com.preproject.server.auth.userDetails.LoginMemberIdResolver;
 import com.preproject.server.exception.BusinessLogicException;
 import com.preproject.server.exception.ExceptionCode;
 import com.preproject.server.member.entity.Member;
@@ -47,14 +48,14 @@ public class AnswerService {
 
 
         // 질문 ID를 이용해서 질문 찾기
-        Question question = questionService.findQuestionById(questionId);
+        Question question = questionService.findQuestion(questionId);
 
-//        // 회원 ID를 이용해서 회원 찾기
-//        Member member = memberService.findVerifiedMember(member.);
+        // 회원 ID를 이용해서 회원 찾기
+        Member member = memberService.findVerifiedMemberByEmail(email);
 
         // 답변 엔티티에 질문과 회원정보 설정
         answer.setQuestion(question);
-//        answer.setMember(member);
+        answer.setMember(member);
 
         // 설정된 답변 엔티티를 저장하고 반환
         return answerRepository.save(answer);
@@ -63,12 +64,24 @@ public class AnswerService {
     // 답변 수정
     public Answer updateAnswer(Answer answer, String content) {
 
-        // 답변 찾기
+        // 질문 검문
         Answer findanswer = findAnswerById(answer.getAnswerId());
+        String answerEmail = findanswer.getMember().getEmail();
 
-        // 답변 내용 업데이트
-        if (content != null) {
-            findanswer.setContent(content);
+        // 회원 = 질문
+        questionService.verifyAccess(answerEmail, LoginMemberIdResolver.getLoginMemberEmail());
+
+        // 질문 ID를 이용해서 질문 찾기
+        Question question = questionService.findQuestion(answer.getQuestion().getQuestionId());
+//        Long questionId = questionService.findQuestion(answer.getQuestion().getQuestionId()).getQuestionId();
+        Long findanswerId = answer.getQuestion().getQuestionId();
+
+        if (question.getQuestionId().equals(findanswerId)) {
+
+            // 답변 내용 업데이트
+            if (content != null) {
+                findanswer.setContent(content);
+            }
         }
 
         return answerRepository.save(findanswer);
@@ -78,7 +91,7 @@ public class AnswerService {
     public Page<Answer> findAnswers(int page, int size, long questionId) { // page, size를 매개변수로 멤버를 조회
         // 답변 조회(페이지네이션 구현)
 
-        Question question = questionService.findQuestionById(questionId);
+        Question question = questionService.findQuestion(questionId);
 
         // page, size를 기반으로 PageRequest 객체를 내림차순으로 생성해서 페이지네이션 적용
         // PageRequest 페이지 번호와 페이지 크기를 나타내는 정보 값을 가짐 + 오름차순 정렬
@@ -93,8 +106,14 @@ public class AnswerService {
 
     public void deleteAnswer(Long answerId) {
 
-        // 삭제할 답변 조회
+        // 질문 검증
         Answer findanswer = findAnswerById(answerId);
+        String answerEmail = findanswer.getMember().getEmail();
+
+        // 회원 = 질문
+        questionService.verifyAccess(answerEmail, LoginMemberIdResolver.getLoginMemberEmail());
+//        // 삭제할 답변 조회
+//        Answer findanswer = findAnswerById(answerId);
 
         answerRepository.deleteById(findanswer.getAnswerId());
     }
@@ -113,7 +132,7 @@ public class AnswerService {
     public int countAnswerByMemberId(long memberId) {
 
         // 회원 ID로 Member 객체를 가져온다.
-        Member member = findMemberById(memberId);
+        Member member = memberService.findVerifiedMember(memberId);
 
         // 해당 회원이 작성한 답변의 개수를 센다.
         int answerCount = 0;
@@ -126,20 +145,6 @@ public class AnswerService {
 
         return answerCount;
     }
-
-    // 회원 조회(Id로 확인)
-    public Member findMemberById(Long memberId) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        Member member = optionalMember.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return member;
-    }
-
-    // 회원 존재 여부 확인 메서드(이메일)
-    private Member memberOrException(String email) {
-        return memberRepository.findByEmail(email).orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-    }
-
 }
 
 

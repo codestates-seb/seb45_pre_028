@@ -31,6 +31,8 @@ public class Question {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    private String email;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private QuestionStatus questionStatus = QuestionStatus.QUESTION_REGISTERED;
@@ -48,15 +50,6 @@ public class Question {
     @JoinColumn(name = "MEMBER_ID") // 테이블명
     private Member member;
 
-    /**
-     * 기존 코드
-     */
-//    @OneToOne(mappedBy = "question")
-//    private Answer answer;
-
-    /**
-     * 추가한 부분
-     */
 
     // 한 개의 질문에 여러 개의 답변을 달 수 있음
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
@@ -80,10 +73,6 @@ public class Question {
             this.string = string;
         }
     }
-
-    /**
-     * 추가한 부분
-     */
 
     // 양방향 관계 설정. Question 객체에 답변을 추가
     public void setAnswer(Answer answer) {

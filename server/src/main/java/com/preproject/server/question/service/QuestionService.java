@@ -1,20 +1,19 @@
 package com.preproject.server.question.service;
 
 
-import com.preproject.server.answer.entity.Answer;
+import com.preproject.server.auth.userDetails.LoginMemberIdResolver;
+import com.preproject.server.exception.BusinessLogicException;
+import com.preproject.server.exception.ExceptionCode;
 import com.preproject.server.member.entity.Member;
-import com.preproject.server.member.repository.MemberRepository;
-import com.preproject.server.question.exception.BusinessLogicException;
-import com.preproject.server.question.exception.ExceptionCode;
+import com.preproject.server.member.service.MemberService;
 import com.preproject.server.question.entity.Question;
 import com.preproject.server.question.repository.QuestionRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -23,19 +22,34 @@ import java.util.Optional;
 @Transactional
 public class QuestionService {
     private final QuestionRepository questionRepository;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
 
-    public QuestionService(QuestionRepository questionRepository, MemberRepository memberRepository) {
+
+    public QuestionService(QuestionRepository questionRepository, MemberService memberService) {
         this.questionRepository = questionRepository;
-        this.memberRepository = memberRepository;
+        this.memberService = memberService;
     }
 
-    public Question createQuestion(Question question){
+
+    public Question createQuestion(Question question, String email){
+
+        // 회원 찾기
+        Member member = memberService.findVerifiedMemberByEmail(email);
+
+        // 답변 엔티티에 질문과 회원정보 설정
+        question.setMember(member);
+
         return questionRepository.save(question);
     }
 
     public Question updateQuestion(Question question){
+
+        // 질문 검증
         Question updatedQuestion = findQuestion(question.getQuestionId());
+        String questionEmail = updatedQuestion.getMember().getEmail();
+
+        // 회원 = 질문
+        verifyAccess(questionEmail, LoginMemberIdResolver.getLoginMemberEmail());
 
         Optional.ofNullable(question.getTitle())
                 .ifPresent(title -> updatedQuestion.setTitle(title));
@@ -45,7 +59,7 @@ public class QuestionService {
         return questionRepository.save(updatedQuestion);
     }
 
-    @Transactional(readOnly = true)
+//    @Transactional(readOnly = true)
     public Question findQuestion(long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(()->new BusinessLogicException(ExceptionCode.QUESTION_NOT_FOUND));
@@ -66,41 +80,36 @@ public class QuestionService {
     }
 
     public void deleteQuestion(long questionId){
+
+        // 질문 검증
         Question foundQuestion = findQuestion(questionId);
+        String questionEmail = foundQuestion.getMember().getEmail();
+
+        // 회원 = 질문
+        verifyAccess(questionEmail, LoginMemberIdResolver.getLoginMemberEmail());
         questionRepository.delete(foundQuestion);
     }
 
-        // 질문 조회
-    public Question findQuestionById(Long questionId) {
-        Optional<Question> optionalQuestion = questionRepository.findById(questionId);
-        Question question = optionalQuestion.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return question;
+    public int countQuestionsByMemberId(long memberId) {
+        // 회원 ID로 Member 객체를 가져온다.
+        Member member = memberService.findVerifiedMember(memberId);
+
+        // 해당 회원이 작성한 질문의 개수를 센다.
+        int questionCount = 0;
+        List<Question> questions = questionRepository.findAll();
+        for (Question question : questions) {
+            if (question.getMember().equals(member)) {
+                questionCount++;
+            }
+        }
+
+        return questionCount;
     }
 
-//    /**
-//     * 회원이 질문한 개수 카운트해주는 메서드 추가 + 회원 findMemberById 메서드
-//     */
-//    public int countQuestionsByMemberId(long memberId) {
-//        // 회원 ID로 Member 객체를 가져온다.
-//        Member member = findMemberById(memberId);
-//
-//        // 해당 회원이 작성한 질문의 개수를 센다.
-//        int questionCount = 0;
-//        List<Question> questions = questionRepository.findAll();
-//        for (Question question : questions) {
-//            if (question.getMember().equals(member)) {
-//                questionCount++;
-//            }
-//        }
-//
-//        return questionCount;
-//    }
-
-        // 회원 조회
-    public Member findMemberById(Long memberId) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
-        Member member = optionalMember.orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return member;
+    // 수정 권한 검증
+    public void verifyAccess(String questionEmail, String memberEmail) {
+        if(!questionEmail.equals(memberEmail)) {
+            throw  new BusinessLogicException(ExceptionCode.ACCESS_DENIED);
+        }
     }
-
 }

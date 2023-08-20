@@ -54,16 +54,16 @@ public class MemberController {
     public ResponseEntity findMember(@Positive @PathVariable("member-id") long memberId) {
         Member member = memberService.findMember(memberId);
 
-//        // 회원이 작성한 질문, 답변 개수 조회
-//        long questionCount = questionService.countQuestionsByMemberId(memberId);
-//        long answerCount = answerService.countAnswerByMemberId(memberId);
+        // 회원이 작성한 질문, 답변 개수 조회
+        long questionCount = questionService.countQuestionsByMemberId(memberId);
+        long answerCount = answerService.countAnswerByMemberId(memberId);
 
 
         MemberResponseDto responseDto = mapper.memberToMemberResponseDto(member);
 
-//        // 질문, 답변 개수를 responseDto에 설정
-//        responseDto.setQuestionCount(questionCount);
-//        responseDto.setAnswerCount(answerCount);
+        // 질문, 답변 개수를 responseDto에 설정
+        responseDto.setQuestionCount(questionCount);
+        responseDto.setAnswerCount(answerCount);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }

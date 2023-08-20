@@ -5,6 +5,7 @@ import com.preproject.server.answer.entity.Answer;
 import com.preproject.server.answer.mapper.AnswerMapper;
 import com.preproject.server.answer.service.AnswerService;
 import com.preproject.server.auth.userDetails.LoginMemberIdResolver;
+import com.preproject.server.question.entity.Question;
 import com.preproject.server.question.service.QuestionService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -57,12 +58,15 @@ public class AnswerController {
                                       @PathVariable("answer-id") long answerId,
                                       @Valid @RequestBody AnswerPatchDto answerPatchDto) {
 
-        // 수정할 답변을 찾기
-        Answer updateAnswerId = new Answer();
-        updateAnswerId.setAnswerId(answerId);
+
+//        // 수정할 답변을 찾기
+//        Answer updateAnswerId = new Answer();
+//        updateAnswerId.setAnswerId(answerId);
+
+        answerPatchDto.setAnswerId(answerId);
 
         // 수정한 답변의 내용을 response에 저장
-        Answer response = answerService.updateAnswer(updateAnswerId, answerPatchDto.getContent());
+        Answer response = answerService.updateAnswer(answerMapper.answerPatchDtoToanswer(answerPatchDto), answerPatchDto.getContent());
 
         return new ResponseEntity<>(answerMapper.answerToAnswerResponseDto(response), HttpStatus.OK);
 
@@ -127,4 +131,4 @@ public class AnswerController {
 //    }
 //
 //
-//
+
