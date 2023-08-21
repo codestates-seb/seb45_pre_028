@@ -64,11 +64,11 @@ public class AnswerService {
     // 답변 수정
     public Answer updateAnswer(Answer answer, String content) {
 
-        // 질문 검문
+        // 답변 검증
         Answer findanswer = findAnswerById(answer.getAnswerId());
         String answerEmail = findanswer.getMember().getEmail();
 
-        // 회원 = 질문
+        // 회원 = 답변
         questionService.verifyAccess(answerEmail, LoginMemberIdResolver.getLoginMemberEmail());
 
         // 질문 ID를 이용해서 질문 찾기
@@ -109,7 +109,7 @@ public class AnswerService {
         Answer findanswer = findAnswerById(answerId);
         String answerEmail = findanswer.getMember().getEmail();
 
-        // 회원 = 질문
+        // 회원 = 답변
         questionService.verifyAccess(answerEmail, LoginMemberIdResolver.getLoginMemberEmail());
 
 //        // 질문 ID를 이용해서 질문 찾기
