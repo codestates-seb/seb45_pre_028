@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
-import { Question } from "../../types/types";
-import { modalState, questionsState } from "../../atoms/atoms";
+import { QuestionData } from "../../types/types";
+import { modalState, questionState } from "../../atoms/atoms";
 import { useFetch } from "../../hooks/useFetch";
 import { Link, useParams } from "react-router-dom";
 import { COMMON_CSS } from "../../constants/common_css";
@@ -9,6 +9,7 @@ import { useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import axios from "axios";
 import Modal from "../common/Modal";
+import { getAccessToken } from "../../util/auth";
 const QuestionContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -123,15 +124,29 @@ function QuestionList() {
     const date = new Date(createdAt === modifiedAt ? createdAt : modifiedAt).toString();
     return getFormattedDate(date);
   };
-  const { fetchData, isLoading, isError, data } = useFetch<Question>(questionsState, "/question");
+  const { fetchData, isLoading, isError, data } = useFetch<QuestionData>(
+    questionState,
+    `/question/${id}`,
+  );
+
   const ChangeContentHandler = () => {
     setChangeContent(!changeContent);
   };
   const deleteHandler = async (questionId: string | undefined) => {
+    console.log(questionId);
     try {
-      setNewContent("");
-      await axios.delete(`/question/${questionId}`);
+      type Headers = Record<string, string>;
+      const headers: Headers = {
+        "ngrok-skip-browser-warning": "69420",
+      };
+      const token = getAccessToken();
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      await axios.delete(`/question/${questionId}`, { headers });
       await fetchData();
+      setNewContent("");
     } catch (error) {
       // 에러 처리
     } finally {
@@ -142,10 +157,14 @@ function QuestionList() {
     try {
       await setChangeContent(!changeContent);
 
-      await axios.patch(`/question/${questionId}`, {
-        title: `${newTitle}`,
-        content: `${newContent}`,
-      });
+      await axios.patch(
+        `/question/${questionId}`,
+        {
+          title: `${newTitle}`,
+          content: `${newContent}`,
+        },
+        { headers: { "ngrok-skip-browser-warning": "69420" } },
+      );
       await fetchData();
     } catch (error) {
       // 에러 처리
@@ -168,20 +187,20 @@ function QuestionList() {
       </QuestionContainer>
     );
   }
-  if (data && data.questionData.length > 0) {
+  if (data) {
     return (
       <QuestionContainer>
-        <div key={data.questionData[0]?.id} className="question_box">
+        <div key={data?.id} className="question_box">
           <div className="title_box">
             {changeContent ? (
               <textarea
                 className="title-input"
-                placeholder={data.questionData[0]?.title}
+                placeholder={data?.title}
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
               ></textarea>
             ) : (
-              <div className="title">{data.questionData[0]?.title}</div>
+              <div className="title">{data?.title}</div>
             )}
 
             <Link to="/write" className="ask-button">
@@ -190,19 +209,19 @@ function QuestionList() {
           </div>
           {changeContent ? (
             <textarea
-              placeholder={data.questionData[0]?.content}
+              placeholder={data?.content}
               value={newContent}
               onChange={(e) => setNewContent(e.target.value)}
             ></textarea>
           ) : (
-            <div className="content">{data.questionData[0]?.content}</div>
+            <div className="content">{data?.content}</div>
           )}
           <div className="question_user">
             {changeContent ? (
               <div className="option">
                 <button
                   onClick={() => {
-                    patchHandler(data.questionData[0].questionId);
+                    patchHandler(data.questionId);
                   }}
                 >
                   Change
@@ -229,10 +248,10 @@ function QuestionList() {
               </div>
             )}
             <div className="time">
-              {printState(data.questionData[0]?.createdAt, data.questionData[0]?.modifiedAt)}{" "}
-              {printDate(data.questionData[0]?.createdAt, data.questionData[0]?.modifiedAt)}
+              {printState(data?.createdAt, data?.modifiedAt)}{" "}
+              {printDate(data?.createdAt, data?.modifiedAt)}
             </div>
-            {/* <div className="question_id">{data.questionData[0]?.member_id}</div> */}
+            {/* <div className="question_id">{data?.member_id}</div> */}
           </div>
         </div>
         {modalIsOpen && (
@@ -244,6 +263,7 @@ function QuestionList() {
                 <button
                   className="discard-action"
                   onClick={() => {
+                    console.log("hi");
                     deleteHandler(id);
                   }}
                 >
