@@ -75,18 +75,22 @@ const LoginForm = (): JSX.Element => {
   } = useForm<LogInForm>();
 
   const onValid = async (data: { email: string; password: string }) => {
-    const response = await axios.post("/", data);
+    const response = await axios.post("Base_URL", data);
     if (!response) {
       setError("formError", {
         message: "이메일, 혹은 비밀번호가 올바른지 확인해주십시요",
       });
     } else {
       try {
-        const { accessToken, refreshToken } = response.data;
-        localStorage.setItem("accessToken", accessToken);
-        localStorage.setItem("refreshToken", refreshToken);
-
-        navigate("/");
+        const getLogin = async () => {
+          const { accessToken, refreshToken } = response.data;
+          await axios.get("Login_URL", { headers: { Authorization: `Bearer ${accessToken}` } });
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+          navigate("/");
+        };
+        getLogin();
       } catch (error) {
         console.log(error);
       }
