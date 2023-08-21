@@ -1,15 +1,17 @@
 package com.preproject.server.auth.filter;
 
-import com.preproject.server.auth.dto.LoginDto;
+import com.google.gson.Gson;
+import com.preproject.server.auth.login.dto.LoginDto;
 import com.preproject.server.auth.jwt.JwtTokenizer;
+import com.preproject.server.auth.login.dto.LoginResponseDto;
 import com.preproject.server.member.entity.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -49,8 +51,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String accessToken = delegateAccessToken(member);
         String refreshToken = delegateRefreshToken(member);
 
+        LoginResponseDto loginResponseDto = new LoginResponseDto(member.getMemberId(),accessToken);
+        Gson gson = new Gson();
+
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().write(gson.toJson(loginResponseDto));
 
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
