@@ -1,13 +1,13 @@
-import { useState } from "react";
 import axios from "axios";
-import { styled } from "styled-components";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
+import { styled } from "styled-components";
 import { answerState, modalState } from "../../atoms/atoms";
 import { useFetch } from "../../hooks/useFetch";
-import Modal from "../common/Modal";
 import { Answer, AnswerData } from "../../types/types";
-import { useParams } from "react-router-dom";
 import { getFormattedDate } from "../../util/date";
+import Modal from "../common/Modal";
 
 const AnswerContainer = styled.div`
   display: flex;

@@ -1,6 +1,6 @@
-import AnswerInput from "../components/main/AnswerInput";
-import AnswerList from "../components/main/AnswerList";
-import Question from "../components/main/Question";
+import AnswerInput from "../components/answer/AnswerInput";
+import AnswerList from "../components/answer/AnswerList";
+import Question from "../components/question/Question";
 
 const Questions = (): JSX.Element => {
   return (

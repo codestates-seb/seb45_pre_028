@@ -19,7 +19,7 @@ export interface Answer {
 
 export interface AnswerData {
   id?: string;
-  questionId: number;
+  answerId: number;
   content: string;
   createdAt: string;
   modifiedAt: string;
