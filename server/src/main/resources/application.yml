@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${LOCAL_DB_URL}
-    username: ${LOCAL_DB_USERNAME}
-    password: ${LOCAL_DB_PASSWORD}
+    url: jdbc:mysql://localhost:3306/test?serverTimezone=Asia/Seoul
+    username: root
+    password: soso1224
 
   jpa:
     hibernate:
@@ -28,8 +28,8 @@ spring:
       client:
         registration:
           google:
-            clientId: ${G_CLIENT_ID}
-            clientSecret: ${G_CLIENT_SECRET}
+            clientId: 338624824075-rrqtn59dl2ub36lctrb9tg3tfel196jg.apps.googleusercontent.com
+            clientSecret: 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
             scope:
               - email
               - profile
@@ -45,6 +45,6 @@ logging:
               BasicBinder: trace
 
 jwt:
-  key: ${JWT_SECRET_KEY}
+  key: stackoverflow123412341234123412341234
   access-token-expiration-minutes: 30
   refresh-token-expiration-minutes: 420
