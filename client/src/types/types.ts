@@ -19,7 +19,7 @@ export interface Answer {
 
 export interface AnswerData {
   id?: string;
-  questionId: number;
+  answerId: number;
   content: string;
   createdAt: string;
   modifiedAt: string;
@@ -30,4 +30,13 @@ export interface PageInfo {
   size: number;
   totalElements: number;
   totalPages: number;
+}
+
+export interface Member {
+  memberId?: number;
+  email?: string;
+  name?: string;
+  questionCount?: number;
+  answerCount?: number;
+  about?: string;
 }
