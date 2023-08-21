@@ -108,9 +108,15 @@ const WriteForm = (): JSX.Element => {
   const [isActive, setIsActive] = useState(false);
   const setModal = useSetRecoilState(modalState);
   const modalIsOpen = useRecoilValue(modalState);
-  const { register, handleSubmit, reset } = useForm<QuestionData>();
+  const { register, handleSubmit, reset, watch } = useForm<QuestionData>();
+  const title = watch("title", "");
+  const content = watch("content", "");
 
   const onClickHandler = () => {
+    if (title.length === 0) {
+      return;
+    }
+
     setIsActive(true);
   };
 
@@ -127,13 +133,12 @@ const WriteForm = (): JSX.Element => {
     // const formData = { ...data, content: editorData.innerHTML };
     // console.log(formData);
 
-    data = {
-      ...data,
-      // member_id: 1,
-    };
+    if (content.length === 0) {
+      return;
+    }
 
     try {
-      const response = await axios.post("/question", data);
+      const response = await axios.post("/api/question", data);
       if (response) {
         navigate("/");
         fetchData();
