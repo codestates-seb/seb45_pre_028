@@ -12,7 +12,8 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class MemberPostDto {
     @NotBlank
-    @Email
+    @Pattern(regexp = "^[a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\\.[a-zA-Z]+$",
+    message = "올바르지 않은 이메일 형식입니다.")
     private String email;
 
     @NotBlank(message = "이름은 공백이 아니어야 합니다.")
@@ -20,8 +21,8 @@ public class MemberPostDto {
     private String name;
 
     @NotBlank(message = "비밀번호는 공백이 아니어야 합니다.")
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,12}$",
-    message = "비밀번호는 8자리 이상 12자리 이하 영문자와 숫자 특수문자를 포함하여야 합니다.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*\\d)[a-zA-Z\\d]{8,}$",
+    message = "비밀번호는 8자리 이상 영문자와 숫자를 포함하여야 합니다.")
     private String password;
 
     private String about;

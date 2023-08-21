@@ -9,8 +9,8 @@ public class LoginResponseDto {
     private long memberId;
     private String accessToken;
 
-    public LoginResponseDto(long memberId,String accessToken) {
+    public LoginResponseDto(long memberId, String accessToken) {
         this.memberId = memberId;
-        this.accessToken=accessToken;
+        this.accessToken = accessToken;
     }
 }
