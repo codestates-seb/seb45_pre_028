@@ -20,4 +20,6 @@ public class MemberPatchDto {
             message = "비밀번호는 8자리 이상 12자리 이하 영문자와 숫자 특수문자를 포함하여야 합니다.")
     @NotBlank(message = "비밀번호는 공백이 아니어야 합니다.")
     private String password;
+
+    private String about;
 }

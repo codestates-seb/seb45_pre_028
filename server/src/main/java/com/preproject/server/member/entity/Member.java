@@ -30,6 +30,9 @@ public class Member {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private String about;
+
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
