@@ -101,7 +101,7 @@ public class SecurityConfiguration {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080","http://localhost:3000", "http://ec2-3-39-177-53.ap-northeast-2.compute.amazonaws.com"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("*"));
