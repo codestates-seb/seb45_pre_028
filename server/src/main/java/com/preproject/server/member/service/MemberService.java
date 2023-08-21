@@ -41,6 +41,7 @@ public class MemberService {
 
         Optional.ofNullable(member.getName()).ifPresent(findMember::setName);
         Optional.ofNullable(member.getPassword()).ifPresent(password -> findMember.setPassword(passwordEncoder.encode(password)));
+        Optional.ofNullable(member.getAbout()).ifPresent(findMember::setAbout);
         findMember.setModifiedAt(LocalDateTime.now());
 
         return memberRepository.save(findMember);
