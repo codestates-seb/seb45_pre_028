@@ -12,6 +12,7 @@ import { modalState, questionsState } from "../../atoms/atoms";
 import { COMMON_CSS } from "../../constants/common_css";
 import { useFetch } from "../../hooks/useFetch";
 import { QuestionData } from "../../types/types";
+import { getAccessToken } from "../../util/auth";
 import Modal from "../common/Modal";
 
 const StyledField = styled.div`
@@ -111,6 +112,7 @@ const WriteForm = (): JSX.Element => {
   const { register, handleSubmit, reset, watch } = useForm<QuestionData>();
   const title = watch("title", "");
   const content = watch("content", "");
+  const token = getAccessToken();
 
   const onClickHandler = () => {
     if (title.length === 0) {
@@ -138,7 +140,12 @@ const WriteForm = (): JSX.Element => {
     }
 
     try {
-      const response = await axios.post("/api/question", data);
+      const response = await axios.post("/question", data, {
+        headers: {
+          "ngrok-skip-browser-warning": "69420",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response) {
         navigate("/");
         fetchData();
