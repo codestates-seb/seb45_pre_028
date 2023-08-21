@@ -1,7 +1,8 @@
-import { styled } from "styled-components";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
+import { styled } from "styled-components";
 import { loggedIn } from "../../atoms/atoms";
 
 const LogInFormComponent = styled.form`
@@ -60,7 +61,7 @@ const LogInFormComponent = styled.form`
 `;
 
 interface LogInForm {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -73,18 +74,31 @@ const LoginForm = (): JSX.Element => {
   } = useForm<LogInForm>();
   const [LogIn, setLogIn] = useRecoilState(loggedIn);
 
-  const onValid = async (data: { email: string; password: string }) => {
+  const onValid = async (data: LogInForm) => {
     console.log(data);
     console.log(LogIn);
     setLogIn(true);
     navigate("/");
   };
 
+  const onSubmit = async (data: LogInForm) => {
+    const response = await axios.post("/login", data, {
+      headers: {
+        "ngrok-skip-browser-warning": "69420",
+      },
+    });
+
+    localStorage.setItem("access_token", response.headers["authorization"].split(" ").slice(1));
+    localStorage.setItem("refresh_token", response.headers["refresh"]);
+
+    navigate("/");
+  };
+
   return (
     <LogInFormComponent onSubmit={handleSubmit(onValid)}>
       <div>Email</div>
-      <input {...register("email", { required: "이메일을 입력해주세요" })}></input>
-      {errors ? <span>{errors?.email?.message}</span> : null}
+      <input {...register("username", { required: "이메일을 입력해주세요" })}></input>
+      {errors ? <span>{errors?.username?.message}</span> : null}
       <div>
         <span>Password</span>
         <span
@@ -97,7 +111,7 @@ const LoginForm = (): JSX.Element => {
       </div>
       <input {...register("password", { required: "패스워드를 입력해주세요" })}></input>
       {errors ? <span>{errors?.password?.message}</span> : null}
-      <button>Log in</button>
+      <button onClick={handleSubmit(onSubmit)}>Log in</button>
     </LogInFormComponent>
   );
 };
