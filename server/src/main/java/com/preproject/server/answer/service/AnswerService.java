@@ -3,8 +3,6 @@ package com.preproject.server.answer.service;
 import com.preproject.server.answer.entity.Answer;
 import com.preproject.server.answer.repository.AnswerRepository;
 import com.preproject.server.auth.userDetails.LoginMemberIdResolver;
-import com.preproject.server.exception.BusinessLogicException;
-import com.preproject.server.exception.ExceptionCode;
 import com.preproject.server.member.entity.Member;
 import com.preproject.server.member.repository.MemberRepository;
 import com.preproject.server.member.service.MemberService;
@@ -15,7 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -27,20 +24,15 @@ public class AnswerService {
 
     private final AnswerRepository answerRepository;
 
-    private final QuestionRepository questionRepository;
-    private final MemberRepository memberRepository;
     private final QuestionService questionService;
 
     private final MemberService memberService;
 
 
-    public AnswerService(AnswerRepository answerRepository, MemberService memberService,
-                         QuestionService questionService, QuestionRepository questionRepository, MemberRepository memberRepository) {
+    public AnswerService(AnswerRepository answerRepository, MemberService memberService, QuestionService questionService) {
         this.answerRepository = answerRepository;
         this.memberService = memberService;
         this.questionService = questionService;
-        this.questionRepository = questionRepository;
-        this.memberRepository = memberRepository;
     }
 
     //     답변 등록
