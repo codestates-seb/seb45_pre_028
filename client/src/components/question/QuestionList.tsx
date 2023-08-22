@@ -109,7 +109,7 @@ const QuestionList = () => {
                 </h3>
                 <p className="summary">{question.content}</p>
                 <div className="user">
-                  {/* <span className="id">{question.memberId}</span> */}
+                  <span className="id">{question.memberId}</span>
                   <span className="activity">
                     {printState(question.createdAt, question.modifiedAt)}
                   </span>
