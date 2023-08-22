@@ -1,6 +1,6 @@
 const logout = async () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("memberId");
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("member_id");
 };
 
 export default logout;
