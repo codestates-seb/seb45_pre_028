@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { COMMON_CSS } from "../../constants/common_css";
 import { ProfileProp } from "../../pages/Member";
 import { Member } from "../../types/types";
-import { getAccessToken } from "../../util/auth";
+import { getAccessToken, getUserId } from "../../util/auth";
 import Button from "../common/Button";
 
 const StyledSetting = styled.section`
@@ -81,9 +81,16 @@ const StyledSetting = styled.section`
 const Setting = ({ setActiveTab }: ProfileProp): JSX.Element => {
   const { register, handleSubmit } = useForm();
   const token = getAccessToken();
+  const memberId = getUserId();
 
   const onSubmit = async (data: Member) => {
-    await axios.patch("/member/1", data, {
+    for (const key in data) {
+      if (data[key as keyof Member] === "") {
+        delete data[key as keyof Member];
+      }
+    }
+
+    await axios.patch(`/member/${memberId}`, data, {
       headers: {
         "ngrok-skip-browser-warning": "69420",
         Authorization: `Bearer ${token}`,
@@ -102,9 +109,9 @@ const Setting = ({ setActiveTab }: ProfileProp): JSX.Element => {
 
         <label htmlFor="">Password</label>
         <input {...register("password")} />
-        {/* 
+
         <label htmlFor="">About me</label>
-        <textarea {...register("about")}></textarea> */}
+        <textarea {...register("about")}></textarea>
       </div>
       <div className="button-layout">
         <Button onClick={handleSubmit(onSubmit)}>Save profile</Button>

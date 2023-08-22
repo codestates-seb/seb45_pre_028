@@ -35,8 +35,8 @@ const StyledField = styled.div`
 
     &:focus {
       outline: none;
-      border: 1px solid #6ebcf7;
-      box-shadow: 0 0 0 4px #dff1ff;
+      border: 1px solid ${COMMON_CSS["input-focus-border"]};
+      box-shadow: ${COMMON_CSS["input-focus-shadow"]};
     }
   }
 

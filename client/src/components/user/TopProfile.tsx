@@ -3,7 +3,7 @@ import { memberState } from "../../atoms/atoms";
 import { COMMON_CSS } from "../../constants/common_css";
 import { useFetch } from "../../hooks/useFetch";
 import { ProfileProp } from "../../pages/Member";
-import { getAccessToken } from "../../util/auth";
+import { getAccessToken, getUserId } from "../../util/auth";
 
 const StyledProfile = styled.section`
   position: relative;
@@ -41,7 +41,7 @@ const StyledProfile = styled.section`
 `;
 
 const TopProfile = ({ setActiveTab }: ProfileProp): JSX.Element => {
-  const memberId = 1;
+  const memberId = getUserId();
   const token = getAccessToken();
   const { data } = useFetch(memberState, `/member/${memberId}`, token);
 
