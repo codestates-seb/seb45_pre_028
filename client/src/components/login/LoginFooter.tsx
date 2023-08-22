@@ -33,7 +33,7 @@ const LinkSignUp = (): JSX.Element => {
         <span>Don't have an account?</span>
         <span
           onClick={() => {
-            navigate("/signin");
+            navigate("/sign");
           }}
         >
           Sign up

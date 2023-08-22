@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { styled } from "styled-components";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -79,11 +80,14 @@ const SignInForm = () => {
     setError,
   } = useForm<SignInForm>();
 
-  const onValid = async (data: { email: string; password: string; name: string }) => {
+  const onValid = async (data: { email: string; name: string; password: string }) => {
     try {
-      const response = await axios.post("Base_URL", data);
-      console.log(response);
       console.log(data);
+      const response = await axios.post("/member/signup", data, {
+        headers: {
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
       if (!response) {
         setError("formError", {
           message: "회원가입 정보가 유효하지 않습니다. 이미 가입된 이메일 계정인지 확인해주십시요",
@@ -92,22 +96,13 @@ const SignInForm = () => {
         navigate("/login");
       }
     } catch (error) {
+      console.log("서버 에러");
       console.log(error);
     }
   };
 
   return (
     <SignInFormComponent onSubmit={handleSubmit(onValid)}>
-      <div>User name</div>
-      <input
-        {...register("name", {
-          required: "필수 입력 사항입니다.",
-          validate: {
-            checklength: (value) => (value.length < 2 ? "최소 2 글자를 입력해야 합니다" : true),
-          },
-        })}
-      ></input>
-      {errors ? <span>{errors?.name?.message}</span> : null}
       <div>Email</div>
       <input
         {...register("email", {
@@ -119,6 +114,17 @@ const SignInForm = () => {
         })}
       ></input>
       {errors ? <span>{errors?.email?.message}</span> : null}
+      <div>User name</div>
+      <input
+        {...register("name", {
+          required: "필수 입력 사항입니다.",
+          validate: {
+            checklength: (value) => (value.length < 2 ? "최소 2 글자를 입력해야 합니다" : true),
+          },
+        })}
+      ></input>
+      {errors ? <span>{errors?.name?.message}</span> : null}
+
       <div>Password</div>
       <input
         {...register("password", {
@@ -126,6 +132,7 @@ const SignInForm = () => {
           validate: {
             checkLength: (value) => (value.length < 8 ? "최소 8자를 입력해야 합니다" : true),
           },
+
           pattern: {
             value: /^(?=.*[a-zA-Z])(?=.*\d).+$/,
             message: "비밀번호 규정을 지켜 입력해주세요",
