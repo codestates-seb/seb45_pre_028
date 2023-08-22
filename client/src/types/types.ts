@@ -1,17 +1,43 @@
 export interface Question {
-  question_id: number;
+  questionData: QuestionData[];
+  pageInfo: PageInfo;
+}
+
+export interface QuestionData {
+  id?: string;
+  memberId?: number;
+  questionId: number;
   title: string;
+  content: string;
   createdAt: string;
   modifiedAt: string;
-  member_id: number;
-  content: string;
 }
 
 export interface Answer {
-  answer_id: number;
-  title: string;
+  answerData: AnswerData[];
+  pageInfo: PageInfo;
+}
+
+export interface AnswerData {
+  id?: string;
+  answerId: number;
+  content: string;
   createdAt: string;
   modifiedAt: string;
-  member_id: number;
-  question_id: string;
+}
+
+export interface PageInfo {
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
+
+export interface Member {
+  memberId?: number;
+  email?: string;
+  name?: string;
+  questionCount?: number;
+  answerCount?: number;
+  about?: string;
 }

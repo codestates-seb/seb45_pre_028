@@ -1,7 +1,9 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
-import { RecoilState, RecoilValue, useRecoilState, useRecoilValueLoadable } from "recoil";
+import { RecoilState, useRecoilState } from "recoil";
 
 export interface FetchReturn<T> {
+  fetchData: () => void;
   isLoading: boolean;
   isError: boolean;
   data: T;
@@ -9,33 +11,39 @@ export interface FetchReturn<T> {
 
 export const useFetch = <T extends object>(
   atom: RecoilState<T>,
-  selector: RecoilValue<T>,
+  url: string,
+  token: string | null = null,
 ): FetchReturn<T> => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [data, setData] = useRecoilState(atom);
-  const readDataLoadable = useRecoilValueLoadable(selector);
 
-  const fetchData = () => {
-    switch (readDataLoadable.state) {
-      case "loading":
-        setIsLoading(true);
-        break;
-      case "hasValue":
-        setIsLoading(false);
-        setData(readDataLoadable.contents);
-        break;
-      case "hasError":
-        setIsError(true);
-        setIsLoading(false);
+  type Headers = Record<string, string>;
+  const headers: Headers = {};
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const fetchData = async () => {
+    setIsLoading(true);
+    setIsError(false);
+    try {
+      const response = await axios.get(url, { headers });
+      setData(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      setIsError(true);
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
   return {
+    fetchData,
     isLoading,
     isError,
     data,
