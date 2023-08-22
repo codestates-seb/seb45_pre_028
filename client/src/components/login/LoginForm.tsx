@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { styled } from "styled-components";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -59,7 +60,7 @@ const LogInFormComponent = styled.form`
 `;
 
 interface LogInForm {
-  email: string;
+  username: string;
   password: string;
   formError: string;
 }
@@ -74,8 +75,13 @@ const LoginForm = (): JSX.Element => {
     setError,
   } = useForm<LogInForm>();
 
-  const onValid = async (data: { email: string; password: string }) => {
-    const response = await axios.post("Base_URL", data);
+  const onValid = async (data: { username: string; password: string }) => {
+    console.log(data);
+    const response = await axios.post("/login", data, {
+      headers: {
+        "ngrok-skip-browser-warning": "69420",
+      },
+    });
     if (!response) {
       setError("formError", {
         message: "이메일, 혹은 비밀번호가 올바른지 확인해주십시요",
@@ -83,16 +89,15 @@ const LoginForm = (): JSX.Element => {
     } else {
       try {
         const getLogin = async () => {
-          const { accessToken, refreshToken } = response.data;
-          await axios.get("Login_URL", { headers: { Authorization: `Bearer ${accessToken}` } });
+          const { accessToken, memberId } = response.data;
           localStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("refreshToken", refreshToken);
+          localStorage.setItem("memberId", memberId);
           axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
           navigate("/");
         };
         getLogin();
       } catch (error) {
-        console.log(error);
+        console.log(`에러 ${error}`);
       }
     }
   };
@@ -100,8 +105,8 @@ const LoginForm = (): JSX.Element => {
   return (
     <LogInFormComponent onSubmit={handleSubmit(onValid)}>
       <div>Email</div>
-      <input {...register("email", { required: "이메일을 입력해주세요" })}></input>
-      {errors ? <span>{errors?.email?.message}</span> : null}
+      <input {...register("username", { required: "이메일을 입력해주세요" })}></input>
+      {errors ? <span>{errors?.username?.message}</span> : null}
       <div>
         <span>Password</span>
         <span
@@ -115,7 +120,7 @@ const LoginForm = (): JSX.Element => {
       <input {...register("password", { required: "패스워드를 입력해주세요" })}></input>
       {errors ? <span>{errors?.password?.message}</span> : null}
       <button>Log in</button>
-      {errors ? <span>errors?.formError?.message</span> : null}
+      {errors ? <span>{errors?.formError?.message}</span> : null}
     </LogInFormComponent>
   );
 };
