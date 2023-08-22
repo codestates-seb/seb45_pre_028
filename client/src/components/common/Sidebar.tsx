@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { COMMON_CSS } from "../../constants/common_css";
+import { getAccessToken } from "../../util/auth";
 
 const StyledSidebar = styled.aside`
   position: sticky;
@@ -68,6 +69,7 @@ const StyledSidebar = styled.aside`
 
 const Sidebar = (): JSX.Element => {
   const location = useLocation();
+  const token = getAccessToken();
 
   return (
     <StyledSidebar>
@@ -89,9 +91,11 @@ const Sidebar = (): JSX.Element => {
                 Questions
               </Link>
             </li>
-            <li className={location.pathname.includes("member") ? "active" : ""}>
-              <Link to="/member/${memberid}">User</Link>
-            </li>
+            {token && (
+              <li className={location.pathname.includes("member") ? "active" : ""}>
+                <Link to="/member/${memberid}">User</Link>
+              </li>
+            )}
           </ul>
         </li>
       </ul>

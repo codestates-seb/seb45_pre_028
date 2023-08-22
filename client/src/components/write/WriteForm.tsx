@@ -12,6 +12,7 @@ import { modalState, questionsState } from "../../atoms/atoms";
 import { COMMON_CSS } from "../../constants/common_css";
 import { useFetch } from "../../hooks/useFetch";
 import { QuestionData } from "../../types/types";
+import { getAccessToken } from "../../util/auth";
 import Modal from "../common/Modal";
 
 const StyledField = styled.div`
@@ -108,9 +109,16 @@ const WriteForm = (): JSX.Element => {
   const [isActive, setIsActive] = useState(false);
   const setModal = useSetRecoilState(modalState);
   const modalIsOpen = useRecoilValue(modalState);
-  const { register, handleSubmit, reset } = useForm<QuestionData>();
+  const { register, handleSubmit, reset, watch } = useForm<QuestionData>();
+  const title = watch("title", "");
+  const content = watch("content", "");
+  const token = getAccessToken();
 
   const onClickHandler = () => {
+    if (title.length === 0) {
+      return;
+    }
+
     setIsActive(true);
   };
 
@@ -127,13 +135,17 @@ const WriteForm = (): JSX.Element => {
     // const formData = { ...data, content: editorData.innerHTML };
     // console.log(formData);
 
-    data = {
-      ...data,
-      // member_id: 1,
-    };
+    if (content.length === 0) {
+      return;
+    }
 
     try {
-      const response = await axios.post("/question", data);
+      const response = await axios.post("/question", data, {
+        headers: {
+          "ngrok-skip-browser-warning": "69420",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response) {
         navigate("/");
         fetchData();

@@ -60,7 +60,7 @@ const StyledQuestionList = styled.section`
 `;
 
 const QuestionList = () => {
-  const PAGE_SIZE: number = 5;
+  const PAGE_SIZE: number = 10;
 
   const {
     currentPage,
@@ -69,7 +69,7 @@ const QuestionList = () => {
     onPageChangeHandler,
     onPrevPageHandler,
     onNextPageHandler,
-  } = usePagination<Question>(questionsState, PAGE_SIZE);
+  } = usePagination<Question>(questionsState, PAGE_SIZE, "question");
 
   const { isLoading, isError, data } = useFetch<Question>(
     questionsState,

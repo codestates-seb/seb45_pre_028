@@ -14,11 +14,12 @@ export interface PaginationReturn {
 export const usePagination = <T extends object>(
   atom: RecoilState<T>,
   pageSize: number,
+  data: string,
 ): PaginationReturn => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
-  const { fetchData } = useFetch(atom, `/question?page=${currentPage}&size=${pageSize}`);
+  const { fetchData } = useFetch(atom, `/${data}?page=${currentPage}&size=${pageSize}`);
 
   const onPageChangeHandler = (event: React.MouseEvent<HTMLButtonElement>, pageNumber: number) => {
     if (pageNumber === currentPage) {

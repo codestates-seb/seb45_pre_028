@@ -1,6 +1,6 @@
-import QuestionList from "../components/main/QuestionList";
-import QuestionListFilter from "../components/main/QuestionListFilter";
-import QuestionListTitle from "../components/main/QuestionListTitle";
+import QuestionList from "../components/question/QuestionList";
+import QuestionListFilter from "../components/question/QuestionListFilter";
+import QuestionListTitle from "../components/question/QuestionListTitle";
 
 const Main = (): JSX.Element => {
   return (
