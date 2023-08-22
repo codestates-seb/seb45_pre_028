@@ -2,7 +2,7 @@ import { styled } from "styled-components";
 import { QuestionData } from "../../types/types";
 import { questionState } from "../../atoms/atoms";
 import { useFetch } from "../../hooks/useFetch";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { COMMON_CSS } from "../../constants/common_css";
 import { getFormattedDate } from "../../util/date";
 import { useState } from "react";
@@ -106,10 +106,10 @@ const QuestionContainer = styled.div`
   }
 `;
 const Question = () => {
-  // const modalIsOpen = useRecoilValue<boolean>(modalState);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
+
   const { id } = useParams<string>();
-  // const setModal = useSetRecoilState<boolean>(modalState);
   const [newContent, setNewContent] = useState<string>("");
   const [newTitle, setNewTitle] = useState<string>("");
   const [changeContent, setChangeContent] = useState<boolean>(false);
@@ -149,6 +149,7 @@ const Question = () => {
       alert("권한이 없습니다.");
     } finally {
       toggleModal();
+      navigate("/");
     }
   };
   const patchHandler = async (questionId: number) => {
