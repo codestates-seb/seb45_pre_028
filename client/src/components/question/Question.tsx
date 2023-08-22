@@ -106,7 +106,6 @@ const QuestionContainer = styled.div`
   }
 `;
 
-function Question() {
   // const modalIsOpen = useRecoilValue<boolean>(modalState);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const { id } = useParams<string>();
@@ -128,7 +127,6 @@ function Question() {
     questionState,
     `/question/${id}`,
   );
-
   const ChangeContentHandler = () => {
     setChangeContent(!changeContent);
   };
@@ -157,6 +155,7 @@ function Question() {
   const patchHandler = async (questionId: number) => {
     try {
       await setChangeContent(!changeContent);
+
       type Headers = Record<string, string>;
       const headers: Headers = {
         "ngrok-skip-browser-warning": "69420",

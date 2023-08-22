@@ -31,3 +31,12 @@ export interface PageInfo {
   totalElements: number;
   totalPages: number;
 }
+
+export interface Member {
+  memberId?: number;
+  email?: string;
+  name?: string;
+  questionCount?: number;
+  answerCount?: number;
+  about?: string;
+}

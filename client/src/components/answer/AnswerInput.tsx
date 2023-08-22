@@ -39,6 +39,7 @@ const AnswerInputContainer = styled.div`
 `;
 function AnswerInput() {
   const [answerText, setAnswerText] = useState<string>("");
+
   const { id } = useParams<string>();
 
   const handleAnswerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

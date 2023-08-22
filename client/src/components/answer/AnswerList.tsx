@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import axios from "axios";
 import { styled } from "styled-components";
@@ -92,7 +93,7 @@ function AnswerList() {
   const [deletePendingId, setDeletePendingId] = useState<number | null>(null);
   const { fetchData, isLoading, isError, data } = useFetch<Answer>(
     answerState,
-    `/question/${id}/answer?page=1&size=10`, // 서버 되면 /question/${id}/answer
+    `/question/${id}/answer?page=1&size=10`,
   );
   const [changeContent, setChangeContent] = useState<boolean[]>(
     new Array(data.answerData?.length + 1).fill(false),

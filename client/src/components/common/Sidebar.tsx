@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { COMMON_CSS } from "../../constants/common_css";
+import { getAccessToken } from "../../util/auth";
 
 const StyledSidebar = styled.aside`
   position: sticky;
@@ -23,9 +23,17 @@ const StyledSidebar = styled.aside`
     align-items: center;
     gap: 0.25rem;
     color: ${COMMON_CSS["font-color-gray"]};
-    padding: 0.25rem 0.5rem;
+    padding: 0.25rem 0.5rem 0.25rem 1.875rem;
     font-size: 0.8125rem;
     line-height: 2;
+    position: relative;
+
+    svg {
+      position: absolute;
+      left: 0.5rem;
+      top: 50%;
+      transform: translatey(-50%);
+    }
 
     path {
       fill: ${COMMON_CSS["icon-color-lightgray"]};
@@ -60,11 +68,8 @@ const StyledSidebar = styled.aside`
 `;
 
 const Sidebar = (): JSX.Element => {
-  const [currentPage, setCurrentPage] = useState("");
-
-  useEffect(() => {
-    setCurrentPage(window.location.pathname);
-  }, []);
+  const location = useLocation();
+  const token = getAccessToken();
 
   return (
     <StyledSidebar>
@@ -72,7 +77,7 @@ const Sidebar = (): JSX.Element => {
         <li>
           <p>PUBLIC</p>
           <ul>
-            <li className={currentPage === "/" ? "active" : ""}>
+            <li className={location.pathname === "/" ? "active" : ""}>
               <Link to="/">
                 <svg
                   aria-hidden="true"
@@ -86,6 +91,11 @@ const Sidebar = (): JSX.Element => {
                 Questions
               </Link>
             </li>
+            {token && (
+              <li className={location.pathname.includes("member") ? "active" : ""}>
+                <Link to="/member/${memberid}">User</Link>
+              </li>
+            )}
           </ul>
         </li>
       </ul>
