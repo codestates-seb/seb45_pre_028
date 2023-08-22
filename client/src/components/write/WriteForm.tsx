@@ -125,7 +125,6 @@ const WriteForm = (): JSX.Element => {
   //isActive가 아닐때 tab키로 cursor이동 방지
   const onKeyDownHandler = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === "Tab") {
-      console.log(event);
       event.preventDefault();
     }
   };

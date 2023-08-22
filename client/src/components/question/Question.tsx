@@ -131,7 +131,6 @@ const Question = () => {
     setChangeContent(!changeContent);
   };
   const deleteHandler = async (questionId: string | undefined) => {
-    console.log(questionId);
     try {
       type Headers = Record<string, string>;
       const headers: Headers = {
@@ -182,7 +181,6 @@ const Question = () => {
     }
   };
   const token = getAccessToken();
-  console.log(token);
   if (isLoading) {
     return (
       <QuestionContainer>
