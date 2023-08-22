@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import axios from "axios";
 import { styled } from "styled-components";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -91,7 +92,6 @@ const LoginForm = (): JSX.Element => {
           const { accessToken, memberId } = response.data;
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("memberId", memberId);
-          axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
           navigate("/");
         };
         getLogin();
@@ -101,22 +101,8 @@ const LoginForm = (): JSX.Element => {
     }
   };
 
-  const onSubmit = async (data: LogInForm) => {
-    const response = await axios.post("/login", data, {
-      headers: {
-        "ngrok-skip-browser-warning": "69420",
-      },
-    });
-
-    localStorage.setItem("access_token", response.headers["authorization"].split(" ").slice(1));
-    localStorage.setItem("refresh_token", response.headers["refresh"]);
-    localStorage.setItem("member_id", response.data.memberId);
-
-    navigate("/");
-  };
-
   return (
-    <LogInFormComponent onSubmit={handleSubmit(onSubmit)}>
+    <LogInFormComponent onSubmit={handleSubmit(onValid)}>
       <div>Email</div>
       <input {...register("username", { required: "이메일을 입력해주세요" })}></input>
       {errors ? <span>{errors?.username?.message}</span> : null}
