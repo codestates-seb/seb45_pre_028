@@ -1,12 +1,11 @@
 import { styled } from "styled-components";
 import { QuestionData } from "../../types/types";
-import { modalState, questionState } from "../../atoms/atoms";
+import { questionState } from "../../atoms/atoms";
 import { useFetch } from "../../hooks/useFetch";
 import { Link, useParams } from "react-router-dom";
 import { COMMON_CSS } from "../../constants/common_css";
 import { getFormattedDate } from "../../util/date";
 import { useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
 import axios from "axios";
 import Modal from "../common/Modal";
 import { getAccessToken } from "../../util/auth";
@@ -107,15 +106,16 @@ const QuestionContainer = styled.div`
   }
 `;
 
-function QuestionList() {
-  const modalIsOpen = useRecoilValue<boolean>(modalState);
-  const { id } = useParams();
-  const setModal = useSetRecoilState<boolean>(modalState);
+function Question() {
+  // const modalIsOpen = useRecoilValue<boolean>(modalState);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const { id } = useParams<string>();
+  // const setModal = useSetRecoilState<boolean>(modalState);
   const [newContent, setNewContent] = useState<string>("");
   const [newTitle, setNewTitle] = useState<string>("");
   const [changeContent, setChangeContent] = useState<boolean>(false);
   const toggleModal = () => {
-    setModal(!modalIsOpen);
+    setModalIsOpen(!modalIsOpen);
   };
   const printState = (createdAt: string, modifiedAt: string): string => {
     return createdAt === modifiedAt ? "asked" : "modified";
@@ -263,7 +263,6 @@ function QuestionList() {
                 <button
                   className="discard-action"
                   onClick={() => {
-                    console.log("hi");
                     deleteHandler(id);
                   }}
                 >
@@ -287,4 +286,4 @@ function QuestionList() {
   }
 }
 
-export default QuestionList;
+export default Question;
