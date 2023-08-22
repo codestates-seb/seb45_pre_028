@@ -156,6 +156,14 @@ function Question() {
   const patchHandler = async (questionId: number) => {
     try {
       await setChangeContent(!changeContent);
+      type Headers = Record<string, string>;
+      const headers: Headers = {
+        "ngrok-skip-browser-warning": "69420",
+      };
+      const token = getAccessToken();
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
 
       await axios.patch(
         `/question/${questionId}`,
@@ -163,7 +171,7 @@ function Question() {
           title: `${newTitle}`,
           content: `${newContent}`,
         },
-        { headers: { "ngrok-skip-browser-warning": "69420" } },
+        { headers },
       );
       await fetchData();
     } catch (error) {
