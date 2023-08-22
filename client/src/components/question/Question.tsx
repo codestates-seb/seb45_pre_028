@@ -1,14 +1,16 @@
+import axios from "axios";
+import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { styled } from "styled-components";
-import { QuestionData } from "../../types/types";
 import { questionState } from "../../atoms/atoms";
 import { useFetch } from "../../hooks/useFetch";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { COMMON_CSS } from "../../constants/common_css";
-import { getFormattedDate } from "../../util/date";
-import { useState } from "react";
-import axios from "axios";
-import Modal from "../common/Modal";
+import { useFetch } from "../../hooks/useFetch";
+import { QuestionData } from "../../types/types";
 import { getAccessToken } from "../../util/auth";
+import { getFormattedDate } from "../../util/date";
+import Modal from "../common/Modal";
 const QuestionContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -133,10 +135,9 @@ const Question = () => {
   const deleteHandler = async (questionId: string | undefined) => {
     try {
       type Headers = Record<string, string>;
-      const headers: Headers = {
-        "ngrok-skip-browser-warning": "69420",
-      };
+      const headers: Headers = {};
       const token = getAccessToken();
+
       if (token) {
         headers["Authorization"] = `Bearer ${token}`;
       }

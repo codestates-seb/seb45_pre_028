@@ -19,9 +19,7 @@ export const useFetch = <T extends object>(
   const [data, setData] = useRecoilState(atom);
 
   type Headers = Record<string, string>;
-  const headers: Headers = {
-    "ngrok-skip-browser-warning": "69420",
-  };
+  const headers: Headers = {};
 
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;

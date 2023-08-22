@@ -141,7 +141,6 @@ const WriteForm = (): JSX.Element => {
     try {
       const response = await axios.post("/question", data, {
         headers: {
-          "ngrok-skip-browser-warning": "69420",
           Authorization: `Bearer ${token}`,
         },
       });

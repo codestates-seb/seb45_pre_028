@@ -1,5 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { styled } from "styled-components";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 const SignInFormComponent = styled.form`
   display: flex;
@@ -59,28 +62,47 @@ const SignInFormComponent = styled.form`
 `;
 
 interface SignInForm {
-  username: string;
+  name: string;
   email: string;
   password: string;
+  formError: string;
 }
 
 const SignInForm = () => {
+  // navigate 설정
+  const navigate = useNavigate();
+
   // useForm 함수 설정
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<SignInForm>();
 
-  const onValid = async (data: { email: string; password: string; username: string }) => {
-    console.log(data);
+  const onValid = async (data: { email: string; name: string; password: string }) => {
+    try {
+      console.log(data);
+      const response = await axios.post("/member/signup", data, {
+        headers: {
+          "ngrok-skip-browser-warning": "69420",
+        },
+      });
+      if (!response) {
+        setError("formError", {
+          message: "회원가입 정보가 유효하지 않습니다. 이미 가입된 이메일 계정인지 확인해주십시요",
+        });
+      } else {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.log("서버 에러");
+      console.log(error);
+    }
   };
 
   return (
     <SignInFormComponent onSubmit={handleSubmit(onValid)}>
-      <div>User name</div>
-      <input {...register("username", { required: "필수 입력 사항입니다." })}></input>
-      {errors ? <span>{errors?.username?.message}</span> : null}
       <div>Email</div>
       <input
         {...register("email", {
@@ -92,6 +114,17 @@ const SignInForm = () => {
         })}
       ></input>
       {errors ? <span>{errors?.email?.message}</span> : null}
+      <div>User name</div>
+      <input
+        {...register("name", {
+          required: "필수 입력 사항입니다.",
+          validate: {
+            checklength: (value) => (value.length < 2 ? "최소 2 글자를 입력해야 합니다" : true),
+          },
+        })}
+      ></input>
+      {errors ? <span>{errors?.name?.message}</span> : null}
+
       <div>Password</div>
       <input
         {...register("password", {
@@ -99,6 +132,7 @@ const SignInForm = () => {
           validate: {
             checkLength: (value) => (value.length < 8 ? "최소 8자를 입력해야 합니다" : true),
           },
+
           pattern: {
             value: /^(?=.*[a-zA-Z])(?=.*\d).+$/,
             message: "비밀번호 규정을 지켜 입력해주세요",
@@ -108,6 +142,7 @@ const SignInForm = () => {
       ></input>
       {errors ? <span>{errors?.password?.message}</span> : null}
       <p>비밀번호는 하나의 문자와 숫자를 포함하여, 8글자 이상 입력해야합니다.</p>
+      {errors ? <span>{errors.formError?.message}</span> : null}
       <button>Sign up</button>
     </SignInFormComponent>
   );

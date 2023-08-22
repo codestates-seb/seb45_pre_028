@@ -16,8 +16,7 @@ const StyledListFilter = styled.section`
   }
 
   ul {
-    display: none;
-    /* display: flex; */
+    display: flex;
     flex-flow: row;
     border: solid 0.5px #babfc4;
     border-radius: 0.375rem;
@@ -28,6 +27,7 @@ const StyledListFilter = styled.section`
   }
 
   button {
+    cursor: not-allowed;
     padding: 0.6rem;
     border: none;
     background: transparent;

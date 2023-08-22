@@ -5,6 +5,7 @@ export interface Question {
 
 export interface QuestionData {
   id?: string;
+  memberId?: number;
   questionId: number;
   title: string;
   content: string;
