@@ -64,9 +64,11 @@ const Pagination = ({
           {pageNumber}
         </button>
       ))}
-      <button onClick={onNextPage} className={currentPage === totalPages ? "disabled" : ""}>
-        next
-      </button>
+      {totalPages > 0 && (
+        <button onClick={onNextPage} className={currentPage === totalPages ? "disabled" : ""}>
+          next
+        </button>
+      )}
     </StyledPagination>
   );
 };

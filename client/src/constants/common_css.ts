@@ -15,4 +15,6 @@ export const COMMON_CSS: CommonCss = {
   "footer-color": "#232629",
   "footer-font-main-color": "#babfc4",
   "footer-font-sub-color": "#9199A1",
+  "input-focus-border": "#6ebcf7",
+  "input-focus-shadow": "0 0 0 3px #dff1ff",
 };

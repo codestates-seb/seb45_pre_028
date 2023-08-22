@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { memberState } from "../../atoms/atoms";
 import { COMMON_CSS } from "../../constants/common_css";
 import { useFetch } from "../../hooks/useFetch";
-import { getAccessToken } from "../../util/auth";
+import { getAccessToken, getUserId } from "../../util/auth";
 
 const StyledProfile = styled.section`
   display: flex;
@@ -44,7 +44,7 @@ const StyledProfile = styled.section`
 `;
 
 const BottomProfile = (): JSX.Element => {
-  const memberId = 1;
+  const memberId = getUserId();
   const token = getAccessToken();
   const { data } = useFetch(memberState, `/member/${memberId}`, token);
 
