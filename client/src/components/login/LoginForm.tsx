@@ -1,9 +1,8 @@
-import axios from "axios";
+/* eslint-disable prettier/prettier */
+import { styled } from "styled-components";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import { styled } from "styled-components";
-import { loggedIn } from "../../atoms/atoms";
+import axios from "axios";
 
 const LogInFormComponent = styled.form`
   display: flex;
@@ -63,36 +62,43 @@ const LogInFormComponent = styled.form`
 interface LogInForm {
   username: string;
   password: string;
+  formError: string;
 }
 
 const LoginForm = (): JSX.Element => {
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<LogInForm>();
-  const [LogIn, setLogIn] = useRecoilState(loggedIn);
 
-  const onValid = async (data: LogInForm) => {
+  const onValid = async (data: { username: string; password: string }) => {
     console.log(data);
-    console.log(LogIn);
-    setLogIn(true);
-    navigate("/");
-  };
-
-  const onSubmit = async (data: LogInForm) => {
     const response = await axios.post("/login", data, {
       headers: {
         "ngrok-skip-browser-warning": "69420",
       },
     });
-
-    localStorage.setItem("access_token", response.headers["authorization"].split(" ").slice(1));
-    localStorage.setItem("refresh_token", response.headers["refresh"]);
-    localStorage.setItem("member_id", response.data.memberId);
-
-    navigate("/");
+    if (!response) {
+      setError("formError", {
+        message: "이메일, 혹은 비밀번호가 올바른지 확인해주십시요",
+      });
+    } else {
+      try {
+        const getLogin = async () => {
+          const { accessToken, memberId } = response.data;
+          localStorage.setItem("access_token", accessToken);
+          localStorage.setItem("member_id", memberId);
+          navigate("/");
+        };
+        getLogin();
+      } catch (error) {
+        console.log(`에러 ${error}`);
+      }
+    }
   };
 
   return (
@@ -112,7 +118,8 @@ const LoginForm = (): JSX.Element => {
       </div>
       <input {...register("password", { required: "패스워드를 입력해주세요" })}></input>
       {errors ? <span>{errors?.password?.message}</span> : null}
-      <button onClick={handleSubmit(onSubmit)}>Log in</button>
+      <button>Log in</button>
+      {errors ? <span>{errors?.formError?.message}</span> : null}
     </LogInFormComponent>
   );
 };
