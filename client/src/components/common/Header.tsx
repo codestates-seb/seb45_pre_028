@@ -157,7 +157,8 @@ const Header = (): JSX.Element => {
             <>
               <div
                 onClick={() => {
-                  navigate("/");
+                  const memberId = localStorage.getItem("member_id");
+                  navigate(`/member/${memberId}`);
                 }}
               >
                 <span>Profile</span>
