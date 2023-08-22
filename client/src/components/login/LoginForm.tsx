@@ -90,8 +90,8 @@ const LoginForm = (): JSX.Element => {
       try {
         const getLogin = async () => {
           const { accessToken, memberId } = response.data;
-          localStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("memberId", memberId);
+          localStorage.setItem("access_token", accessToken);
+          localStorage.setItem("member_id", memberId);
           navigate("/");
         };
         getLogin();
