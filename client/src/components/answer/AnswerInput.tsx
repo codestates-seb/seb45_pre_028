@@ -3,6 +3,7 @@ import { styled } from "styled-components";
 import { COMMON_CSS } from "../../constants/common_css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { getAccessToken } from "../../util/auth";
 const AnswerInputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -38,19 +39,29 @@ const AnswerInputContainer = styled.div`
 `;
 function AnswerInput() {
   const [answerText, setAnswerText] = useState<string>("");
-  const { params } = useParams<string>();
+
+  const { id } = useParams<string>();
 
   const handleAnswerSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    type Headers = Record<string, string>;
+    const headers: Headers = {
+      "ngrok-skip-browser-warning": "69420",
+    };
+    const token = getAccessToken();
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
     try {
       const newAnswer = {
         content: answerText,
       };
-      await axios.post(`/question/${params}/answer`, newAnswer);
+      await axios.post(`/question/${id}/answer`, newAnswer, { headers });
       setAnswerText("");
       window.location.reload();
-    } catch (error) {}
+    } catch (error) {
+      alert("권한이 없습니다.");
+    }
   };
 
   return (

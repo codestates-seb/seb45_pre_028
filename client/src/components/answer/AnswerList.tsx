@@ -1,13 +1,15 @@
-import axios from "axios";
+
 import { useState } from "react";
-import { useParams } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import axios from "axios";
 import { styled } from "styled-components";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { answerState, modalState } from "../../atoms/atoms";
 import { useFetch } from "../../hooks/useFetch";
-import { Answer, AnswerData } from "../../types/types";
-import { getFormattedDate } from "../../util/date";
 import Modal from "../common/Modal";
+import { Answer, AnswerData } from "../../types/types";
+import { useParams } from "react-router-dom";
+import { getFormattedDate } from "../../util/date";
+import { getAccessToken } from "../../util/auth";
 
 const AnswerContainer = styled.div`
   display: flex;
@@ -91,7 +93,7 @@ function AnswerList() {
   const [deletePendingId, setDeletePendingId] = useState<number | null>(null);
   const { fetchData, isLoading, isError, data } = useFetch<Answer>(
     answerState,
-    `/answer`, // 서버 되면 /question/${id}/answer
+    `/question/${id}/answer?page=1&size=10`,
   );
   const [changeContent, setChangeContent] = useState<boolean[]>(
     new Array(data.answerData?.length + 1).fill(false),
@@ -100,15 +102,22 @@ function AnswerList() {
     setDeletePendingId(id);
     setModal(!modalIsOpen);
   };
-
+  type Headers = Record<string, string>;
+  const headers: Headers = {
+    "ngrok-skip-browser-warning": "69420",
+  };
+  const token = getAccessToken();
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
   const deleteHandler = async (answerId: number) => {
     try {
       setDeletePendingId(answerId);
       setNewContent("");
-      await axios.delete(`/question/${id}/answer/${answerId}`);
+      await axios.delete(`/question/answer/${answerId}`, { headers });
       await fetchData();
     } catch (error) {
-      // 에러 처리
+      alert("권한이 없습니다.");
     } finally {
       setDeletePendingId(null);
       toggleModal();
@@ -119,12 +128,16 @@ function AnswerList() {
     try {
       await setChangeContent(new Array(data.answerData?.length + 1).fill(false));
 
-      await axios.patch(`/question/${id}/answer/${answerId}`, {
-        content: `${newContent}`,
-      });
+      await axios.patch(
+        `/question/answer/${answerId}`,
+        {
+          content: `${newContent}`,
+        },
+        { headers },
+      );
       await fetchData();
     } catch (error) {
-      // 에러 처리
+      alert("권한이 없습니다.");
     } finally {
       setChangeContent(new Array(data.answerData?.length + 1).fill(false));
     }
