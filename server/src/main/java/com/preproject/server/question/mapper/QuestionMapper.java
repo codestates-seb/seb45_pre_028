@@ -30,8 +30,8 @@ public interface QuestionMapper {
             content = question.getContent();
             createdAt = question.getCreatedAt();
             modifiedAt = question.getModifiedAt();
-            String username = question.getMember().getName();
-            QuestionResponseDto questionResponseDto = new QuestionResponseDto(questionId, username, title, content, createdAt, modifiedAt);
+            Long memberId = question.getMember().getEmail();
+            QuestionResponseDto questionResponseDto = new QuestionResponseDto(questionId, memberId, title, content, createdAt, modifiedAt);
             return questionResponseDto;
         }
     }
