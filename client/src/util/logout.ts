@@ -1,11 +1,9 @@
 import axios from "axios";
-import { redirect } from "react-router-dom";
 
-const logout = () => {
-  axios.defaults.headers.common["인증"] = undefined;
+const logout = async () => {
+  axios.defaults.headers.common["Authorization"] = undefined;
   localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
-  redirect("/login");
+  localStorage.removeItem("memberId");
 };
 
 export default logout;
