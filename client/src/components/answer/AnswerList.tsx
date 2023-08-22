@@ -200,16 +200,18 @@ function AnswerList() {
                   </button>
                 </div>
               ) : (
-                <div className="option">
-                  <button
-                    onClick={() => {
-                      ChangeContentHandler(item.answerId);
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button onClick={() => toggleModal(item.answerId)}>Delete</button>
-                </div>
+                !!token && (
+                  <div className="option">
+                    <button
+                      onClick={() => {
+                        ChangeContentHandler(item.answerId);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button onClick={() => toggleModal(item.answerId)}>Delete</button>
+                  </div>
+                )
               )}
               <div className="answer_user">
                 <div className="time">

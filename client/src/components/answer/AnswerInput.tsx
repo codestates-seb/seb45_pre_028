@@ -63,20 +63,22 @@ function AnswerInput() {
       alert("권한이 없습니다.");
     }
   };
-
+  const token = getAccessToken();
   return (
     <AnswerInputContainer>
-      <form onSubmit={handleAnswerSubmit}>
-        <label htmlFor="answer">Your Answer</label>
-        <textarea
-          placeholder="What do you think?"
-          required={true}
-          id="answer"
-          value={answerText}
-          onChange={(e) => setAnswerText(e.target.value)}
-        />
-        <button type="submit">Post Your Answer</button>
-      </form>
+      {!!token && (
+        <form onSubmit={handleAnswerSubmit}>
+          <label htmlFor="answer">Your Answer</label>
+          <textarea
+            placeholder="What do you think?"
+            required={true}
+            id="answer"
+            value={answerText}
+            onChange={(e) => setAnswerText(e.target.value)}
+          />
+          <button type="submit">Post Your Answer</button>
+        </form>
+      )}
     </AnswerInputContainer>
   );
 }
