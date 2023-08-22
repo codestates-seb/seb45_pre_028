@@ -30,6 +30,7 @@ const LogInFormComponent = styled.form`
   }
 
   & > input {
+    padding: 0 0.3125rem;
     height: 1.875rem;
     border-radius: 7px;
     outline: none;
@@ -112,7 +113,10 @@ const LoginForm = (): JSX.Element => {
           Forgot password?
         </span>
       </div>
-      <input {...register("password", { required: "패스워드를 입력해주세요" })}></input>
+      <input
+        type="password"
+        {...register("password", { required: "패스워드를 입력해주세요" })}
+      ></input>
       {errors ? <span>{errors?.password?.message}</span> : null}
       <button>Log in</button>
       {errors ? <span>{errors?.formError?.message}</span> : null}
