@@ -105,7 +105,7 @@ const QuestionContainer = styled.div`
     margin-top: 1rem;
   }
 `;
-
+const Question = () => {
   // const modalIsOpen = useRecoilValue<boolean>(modalState);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const { id } = useParams<string>();
@@ -293,6 +293,6 @@ const QuestionContainer = styled.div`
       </QuestionContainer>
     );
   }
-}
+};
 
 export default Question;
