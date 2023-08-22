@@ -58,7 +58,9 @@ function AnswerInput() {
       await axios.post(`/question/${id}/answer`, newAnswer, { headers });
       setAnswerText("");
       window.location.reload();
-    } catch (error) {}
+    } catch (error) {
+      alert("권한이 없습니다.");
+    }
   };
 
   return (

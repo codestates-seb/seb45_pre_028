@@ -116,7 +116,7 @@ function AnswerList() {
       await axios.delete(`/question/answer/${answerId}`, { headers });
       await fetchData();
     } catch (error) {
-      console.log(error);
+      alert("권한이 없습니다.");
     } finally {
       setDeletePendingId(null);
       toggleModal();
@@ -136,6 +136,7 @@ function AnswerList() {
       );
       await fetchData();
     } catch (error) {
+      alert("권한이 없습니다.");
     } finally {
       setChangeContent(new Array(data.answerData?.length + 1).fill(false));
     }

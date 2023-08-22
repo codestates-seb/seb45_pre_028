@@ -149,6 +149,7 @@ function Question() {
       setNewContent("");
     } catch (error) {
       // 에러 처리
+      alert("권한이 없습니다.");
     } finally {
       toggleModal();
     }
@@ -176,6 +177,7 @@ function Question() {
       await fetchData();
     } catch (error) {
       // 에러 처리
+      alert("권한이 없습니다.");
     } finally {
       setChangeContent(!changeContent);
     }
