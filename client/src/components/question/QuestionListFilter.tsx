@@ -16,7 +16,8 @@ const StyledListFilter = styled.section`
   }
 
   ul {
-    display: flex;
+    display: none;
+    /* display: flex; */
     flex-flow: row;
     border: solid 0.5px #babfc4;
     border-radius: 0.375rem;
