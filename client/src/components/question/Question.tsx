@@ -131,7 +131,6 @@ const Question = () => {
     setChangeContent(!changeContent);
   };
   const deleteHandler = async (questionId: string | undefined) => {
-    console.log(questionId);
     try {
       type Headers = Record<string, string>;
       const headers: Headers = {
@@ -181,6 +180,7 @@ const Question = () => {
       setChangeContent(!changeContent);
     }
   };
+  const token = getAccessToken();
   if (isLoading) {
     return (
       <QuestionContainer>
@@ -245,16 +245,18 @@ const Question = () => {
                 </button>
               </div>
             ) : (
-              <div className="option">
-                <button
-                  onClick={() => {
-                    ChangeContentHandler();
-                  }}
-                >
-                  Edit
-                </button>
-                <button onClick={() => toggleModal()}>Delete</button>
-              </div>
+              !!token && (
+                <div className="option">
+                  <button
+                    onClick={() => {
+                      ChangeContentHandler();
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button onClick={() => toggleModal()}>Delete</button>
+                </div>
+              )
             )}
             <div className="time">
               {printState(data?.createdAt, data?.modifiedAt)}{" "}

@@ -38,7 +38,6 @@ export const usePagination = <T extends object>(
   };
 
   const onNextPageHandler = () => {
-    console.log(`currentPage:`, currentPage, `totalPages:`, totalPages);
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
