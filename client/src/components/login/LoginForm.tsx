@@ -90,6 +90,7 @@ const LoginForm = (): JSX.Element => {
 
     localStorage.setItem("access_token", response.headers["authorization"].split(" ").slice(1));
     localStorage.setItem("refresh_token", response.headers["refresh"]);
+    localStorage.setItem("member_id", response.data.memberId);
 
     navigate("/");
   };
