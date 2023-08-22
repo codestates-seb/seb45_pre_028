@@ -2,6 +2,7 @@
 import { useForm } from "react-hook-form";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router";
+import logout from "../../util/logout";
 
 const HeaderContainer = styled.div`
   background: #fff;
@@ -120,6 +121,8 @@ const Header = (): JSX.Element => {
     console.log(watch());
   };
 
+  const loggedIn = localStorage.getItem("accessToken");
+
   return (
     <HeaderContainer>
       <div>
@@ -150,20 +153,42 @@ const Header = (): JSX.Element => {
           <input {...register("search")} placeholder="Search..."></input>
         </Search>
         <Login>
-          <div
-            onClick={() => {
-              navigate("/login");
-            }}
-          >
-            <span>Log in</span>
-          </div>
-          <div
-            onClick={() => {
-              navigate("/sign");
-            }}
-          >
-            <span>Sign up</span>
-          </div>
+          {loggedIn ? (
+            <>
+              <div
+                onClick={() => {
+                  navigate("/");
+                }}
+              >
+                <span>Profile</span>
+              </div>
+              <div
+                onClick={() => {
+                  logout();
+                  navigate("/login");
+                }}
+              >
+                <span>Log out</span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div
+                onClick={() => {
+                  navigate("/login");
+                }}
+              >
+                <span>Log in</span>
+              </div>
+              <div
+                onClick={() => {
+                  navigate("/sign");
+                }}
+              >
+                <span>Sign up</span>
+              </div>
+            </>
+          )}
         </Login>
       </div>
     </HeaderContainer>
