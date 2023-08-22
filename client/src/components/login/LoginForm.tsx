@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { styled } from "styled-components";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { styled } from "styled-components";
 
 const LogInFormComponent = styled.form`
   display: flex;
@@ -77,11 +77,7 @@ const LoginForm = (): JSX.Element => {
 
   const onValid = async (data: { username: string; password: string }) => {
     console.log(data);
-    const response = await axios.post("/login", data, {
-      headers: {
-        "ngrok-skip-browser-warning": "69420",
-      },
-    });
+    const response = await axios.post("/login", data);
     if (!response) {
       setError("formError", {
         message: "이메일, 혹은 비밀번호가 올바른지 확인해주십시요",
