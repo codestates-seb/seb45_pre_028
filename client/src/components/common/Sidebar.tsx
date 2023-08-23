@@ -77,7 +77,11 @@ const Sidebar = (): JSX.Element => {
         <li>
           <p>PUBLIC</p>
           <ul>
-            <li className={location.pathname === "/" ? "active" : ""}>
+            <li
+              className={
+                location.pathname === "/" || location.pathname.includes("questions") ? "active" : ""
+              }
+            >
               <Link to="/">
                 <svg
                   aria-hidden="true"
