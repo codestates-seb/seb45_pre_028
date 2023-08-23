@@ -8,3 +8,12 @@ export const getFormattedDate = (date: string): string => {
 
   return `${year}-${month}-${day} ${hour}:${minute}`;
 };
+
+export const printState = (createdAt: string, modifiedAt: string): string => {
+  return createdAt === modifiedAt ? "asked" : "modified";
+};
+
+export const printDate = (createdAt: string, modifiedAt: string): string => {
+  const date = new Date(createdAt === modifiedAt ? createdAt : modifiedAt).toString();
+  return getFormattedDate(date);
+};

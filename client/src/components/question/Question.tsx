@@ -7,7 +7,7 @@ import { COMMON_CSS } from "../../constants/common_css";
 import { useFetch } from "../../hooks/useFetch";
 import { QuestionData } from "../../types/types";
 import { getAccessToken } from "../../util/auth";
-import { getFormattedDate } from "../../util/date";
+import { printDate, printState } from "../../util/date";
 import Modal from "../common/Modal";
 const QuestionContainer = styled.div`
   display: flex;
@@ -116,13 +116,6 @@ const Question = () => {
   const [changeContent, setChangeContent] = useState<boolean>(false);
   const toggleModal = () => {
     setModalIsOpen(!modalIsOpen);
-  };
-  const printState = (createdAt: string, modifiedAt: string): string => {
-    return createdAt === modifiedAt ? "asked" : "modified";
-  };
-  const printDate = (createdAt: string, modifiedAt: string): string => {
-    const date = new Date(createdAt === modifiedAt ? createdAt : modifiedAt).toString();
-    return getFormattedDate(date);
   };
   const { fetchData, isLoading, isError, data } = useFetch<QuestionData>(
     questionState,
