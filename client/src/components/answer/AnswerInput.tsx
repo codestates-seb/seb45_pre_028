@@ -1,8 +1,8 @@
+import axios from "axios";
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { COMMON_CSS } from "../../constants/common_css";
-import axios from "axios";
-import { useParams } from "react-router-dom";
 import { getAccessToken } from "../../util/auth";
 const AnswerInputContainer = styled.div`
   display: flex;
@@ -20,9 +20,16 @@ const AnswerInputContainer = styled.div`
     display: flex;
     flex-direction: column;
     textarea {
+      border: 1px solid #babfc4;
       width: 100%;
       resize: none;
       height: 10rem;
+
+      &:focus {
+        outline: none;
+        border: 1px solid ${COMMON_CSS["input-focus-border"]};
+        box-shadow: ${COMMON_CSS["input-focus-shadow"]};
+      }
     }
     button {
       width: 8rem;

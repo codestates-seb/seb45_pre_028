@@ -1,14 +1,14 @@
 import { styled } from "styled-components";
-import { QuestionData } from "../../types/types";
 import { questionState } from "../../atoms/atoms";
-import { useFetch } from "../../hooks/useFetch";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { COMMON_CSS } from "../../constants/common_css";
-import { getFormattedDate } from "../../util/date";
-import { useState } from "react";
-import axios from "axios";
+import { useFetch } from "../../hooks/useFetch";
+import { QuestionData } from "../../types/types";
+import { printDate, printState } from "../../util/date";
 import Modal from "../common/Modal";
 import { getAccessToken } from "../../util/auth";
+import { useState } from "react";
+import axios from "axios";
 const QuestionContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -116,13 +116,6 @@ const Question = () => {
   const toggleModal = () => {
     setModalIsOpen(!modalIsOpen);
   };
-  const printState = (createdAt: string, modifiedAt: string): string => {
-    return createdAt === modifiedAt ? "asked" : "modified";
-  };
-  const printDate = (createdAt: string, modifiedAt: string): string => {
-    const date = new Date(createdAt === modifiedAt ? createdAt : modifiedAt).toString();
-    return getFormattedDate(date);
-  };
   const { fetchData, isLoading, isError, data } = useFetch<QuestionData>(
     questionState,
     `/question/${id}`,
@@ -142,7 +135,7 @@ const Question = () => {
       }
 
       await axios.delete(`/question/${questionId}`, { headers });
-      await fetchData();
+      fetchData();
       setNewContent("");
     } catch (error) {
       // 에러 처리
@@ -154,7 +147,7 @@ const Question = () => {
   };
   const patchHandler = async (questionId: number) => {
     try {
-      await setChangeContent(!changeContent);
+      setChangeContent(!changeContent);
 
       type Headers = Record<string, string>;
       const headers: Headers = {
@@ -165,15 +158,13 @@ const Question = () => {
         headers["Authorization"] = `Bearer ${token}`;
       }
 
-      await axios.patch(
-        `/question/${questionId}`,
-        {
-          title: `${newTitle}`,
-          content: `${newContent}`,
-        },
-        { headers },
-      );
-      await fetchData();
+      const data: { title?: string; content?: string } = {};
+
+      newTitle.length > 0 ? (data.title = newTitle) : "";
+      newContent.length > 0 ? (data.content = newContent) : "";
+
+      await axios.patch(`/question/${questionId}`, data, { headers });
+      fetchData();
     } catch (error) {
       // 에러 처리
       alert("권한이 없습니다.");
@@ -212,10 +203,11 @@ const Question = () => {
             ) : (
               <div className="title">{data?.title}</div>
             )}
-
-            <Link to="/write" className="ask-button">
-              Ask Question
-            </Link>
+            {token && (
+              <Link to="/write" className="ask-button">
+                Ask Question
+              </Link>
+            )}
           </div>
           {changeContent ? (
             <textarea
@@ -262,15 +254,15 @@ const Question = () => {
             <div className="time">
               {printState(data?.createdAt, data?.modifiedAt)}{" "}
               {printDate(data?.createdAt, data?.modifiedAt)}
+              <div className="question_id">{data?.username}</div>
             </div>
-            {/* <div className="question_id">{data?.member_id}</div> */}
           </div>
         </div>
         {modalIsOpen && (
           <Modal>
             <>
               <h1>Confirm Delete</h1>
-              <p>Are you sure you want to discard this answer? This cannot be undone.</p>
+              <p>Are you sure you want to discard this question? This cannot be undone.</p>
               <div className="button-gap">
                 <button
                   className="discard-action"
@@ -278,7 +270,7 @@ const Question = () => {
                     deleteHandler(id);
                   }}
                 >
-                  Discard answer
+                  Discard question
                 </button>
                 <button className="cancel-action" onClick={() => toggleModal()}>
                   Cancel
