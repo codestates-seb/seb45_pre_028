@@ -126,9 +126,7 @@ const Question = () => {
   const deleteHandler = async (questionId: string | undefined) => {
     try {
       type Headers = Record<string, string>;
-      const headers: Headers = {
-        "ngrok-skip-browser-warning": "69420",
-      };
+      const headers: Headers = {};
       const token = getAccessToken();
       if (token) {
         headers["Authorization"] = `Bearer ${token}`;
