@@ -212,10 +212,11 @@ const Question = () => {
             ) : (
               <div className="title">{data?.title}</div>
             )}
-
-            <Link to="/write" className="ask-button">
-              Ask Question
-            </Link>
+            {token && (
+              <Link to="/write" className="ask-button">
+                Ask Question Ask Question
+              </Link>
+            )}
           </div>
           {changeContent ? (
             <textarea

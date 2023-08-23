@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { COMMON_CSS } from "../../constants/common_css";
+import { getAccessToken } from "../../util/auth";
 
 const StyledListTitle = styled.section`
   padding: 1rem 1rem 1.5rem;
@@ -27,12 +28,16 @@ const StyledListTitle = styled.section`
 `;
 
 const QuestionListTitle = () => {
+  const token = getAccessToken();
+
   return (
     <StyledListTitle>
       <h1> All Questions</h1>
-      <Link to="/write" className="ask-button">
-        Ask Question
-      </Link>
+      {token && (
+        <Link to="/write" className="ask-button">
+          Ask Question
+        </Link>
+      )}
     </StyledListTitle>
   );
 };
