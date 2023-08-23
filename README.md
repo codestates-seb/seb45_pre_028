@@ -141,3 +141,16 @@ ANSWER_05, | 테이블 설명 | 답변 CRUD, 베스트 답변 채택  |
 | test     | 테스트 코드, 리펙토링 테스트 코드 추가          |
 | docs     | 문서명 수정                                     |
 | chore    | 빌드 업무 수정, 패키지 매니저 수정              |
+
+### Preview
+* 회원가입 페이지  
+![signup](./demo_img/4.png)
+
+* 메인 페이지  
+![question_list](./demo_img/1.png)
+
+* 질문 상세 페이지
+![question_detail](./demo_img/3.png)
+
+* 유저 프로필 페이지  
+![user_profile](./demo_img/2.png)
