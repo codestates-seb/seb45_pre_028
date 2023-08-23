@@ -218,7 +218,7 @@ function AnswerList() {
                   {printState(item.createdAt, item.modifiedAt)}{" "}
                   {printDate(item.createdAt, item.modifiedAt)}
                 </div>
-                {/* <div className="answer_id">{item.member_id}</div> */}
+                <div className="answer_id">{item.username}</div>
               </div>
             </div>
           </div>

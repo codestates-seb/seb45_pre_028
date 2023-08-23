@@ -83,7 +83,6 @@ const QuestionList = () => {
   useEffect(() => {
     fetchData();
   }, [currentPage]);
-
   return (
     <>
       <StyledQuestionList>

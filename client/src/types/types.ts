@@ -21,6 +21,7 @@ export interface Answer {
 export interface AnswerData {
   id?: string;
   answerId: number;
+  username: string;
   content: string;
   createdAt: string;
   modifiedAt: string;

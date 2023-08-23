@@ -1,14 +1,14 @@
-import axios from "axios";
-import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { questionState } from "../../atoms/atoms";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { COMMON_CSS } from "../../constants/common_css";
 import { useFetch } from "../../hooks/useFetch";
 import { QuestionData } from "../../types/types";
-import { getAccessToken } from "../../util/auth";
 import { printDate, printState } from "../../util/date";
 import Modal from "../common/Modal";
+import { getAccessToken } from "../../util/auth";
+import { useState } from "react";
+import axios from "axios";
 const QuestionContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -106,11 +106,10 @@ const QuestionContainer = styled.div`
   }
 `;
 const Question = () => {
-  // const modalIsOpen = useRecoilValue<boolean>(modalState);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const navigate = useNavigate();
+
   const { id } = useParams<string>();
-  // const setModal = useSetRecoilState<boolean>(modalState);
   const [newContent, setNewContent] = useState<string>("");
   const [newTitle, setNewTitle] = useState<string>("");
   const [changeContent, setChangeContent] = useState<boolean>(false);
@@ -129,7 +128,6 @@ const Question = () => {
       type Headers = Record<string, string>;
       const headers: Headers = {};
       const token = getAccessToken();
-
       if (token) {
         headers["Authorization"] = `Bearer ${token}`;
       }
@@ -205,7 +203,7 @@ const Question = () => {
             )}
             {token && (
               <Link to="/write" className="ask-button">
-                Ask Question Ask Question
+                Ask Question
               </Link>
             )}
           </div>
@@ -254,15 +252,15 @@ const Question = () => {
             <div className="time">
               {printState(data?.createdAt, data?.modifiedAt)}{" "}
               {printDate(data?.createdAt, data?.modifiedAt)}
+              <div className="question_id">{data?.username}</div>
             </div>
-            {/* <div className="question_id">{data?.member_id}</div> */}
           </div>
         </div>
         {modalIsOpen && (
           <Modal>
             <>
               <h1>Confirm Delete</h1>
-              <p>Are you sure you want to discard this answer? This cannot be undone.</p>
+              <p>Are you sure you want to discard this question? This cannot be undone.</p>
               <div className="button-gap">
                 <button
                   className="discard-action"
@@ -270,7 +268,7 @@ const Question = () => {
                     deleteHandler(id);
                   }}
                 >
-                  Discard answer
+                  Discard question
                 </button>
                 <button className="cancel-action" onClick={() => toggleModal()}>
                   Cancel
