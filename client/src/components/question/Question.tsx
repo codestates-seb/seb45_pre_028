@@ -135,7 +135,7 @@ const Question = () => {
       }
 
       await axios.delete(`/question/${questionId}`, { headers });
-      await fetchData();
+      fetchData();
       setNewContent("");
     } catch (error) {
       // 에러 처리
@@ -147,7 +147,7 @@ const Question = () => {
   };
   const patchHandler = async (questionId: number) => {
     try {
-      await setChangeContent(!changeContent);
+      setChangeContent(!changeContent);
 
       type Headers = Record<string, string>;
       const headers: Headers = {
@@ -158,15 +158,13 @@ const Question = () => {
         headers["Authorization"] = `Bearer ${token}`;
       }
 
-      await axios.patch(
-        `/question/${questionId}`,
-        {
-          title: `${newTitle}`,
-          content: `${newContent}`,
-        },
-        { headers },
-      );
-      await fetchData();
+      const data: { title?: string; content?: string } = {};
+
+      newTitle.length > 0 ? (data.title = newTitle) : "";
+      newContent.length > 0 ? (data.content = newContent) : "";
+
+      await axios.patch(`/question/${questionId}`, data, { headers });
+      fetchData();
     } catch (error) {
       // 에러 처리
       alert("권한이 없습니다.");
