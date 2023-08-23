@@ -5,6 +5,7 @@ export interface Question {
 
 export interface QuestionData {
   id?: string;
+  username?: string;
   questionId: number;
   title: string;
   content: string;
@@ -20,6 +21,7 @@ export interface Answer {
 export interface AnswerData {
   id?: string;
   answerId: number;
+  username: string;
   content: string;
   createdAt: string;
   modifiedAt: string;

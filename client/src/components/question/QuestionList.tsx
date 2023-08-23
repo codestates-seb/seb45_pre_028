@@ -6,7 +6,7 @@ import { COMMON_CSS } from "../../constants/common_css";
 import { useFetch } from "../../hooks/useFetch";
 import { usePagination } from "../../hooks/usePagination";
 import { Question } from "../../types/types";
-import { getFormattedDate } from "../../util/date";
+import { printDate, printState } from "../../util/date";
 import Pagination from "../common/Pagenation";
 
 const StyledQuestionList = styled.section`
@@ -69,7 +69,7 @@ const QuestionList = () => {
     onPageChangeHandler,
     onPrevPageHandler,
     onNextPageHandler,
-  } = usePagination<Question>(questionsState, PAGE_SIZE, "question");
+  } = usePagination();
 
   const { isLoading, isError, data } = useFetch<Question>(
     questionsState,
@@ -79,15 +79,6 @@ const QuestionList = () => {
   useEffect(() => {
     setTotalPages(data.pageInfo.totalPages);
   }, []);
-
-  const printState = (createdAt: string, modifiedAt: string): string => {
-    return createdAt === modifiedAt ? "asked" : "modified";
-  };
-
-  const printDate = (createdAt: string, modifiedAt: string): string => {
-    const date = createdAt === modifiedAt ? createdAt : modifiedAt;
-    return getFormattedDate(date);
-  };
 
   return (
     <>

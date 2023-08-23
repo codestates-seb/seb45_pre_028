@@ -1,6 +1,7 @@
-import { useRecoilValue, useSetRecoilState } from "recoil";
+// import { useRecoilValue, useSetRecoilState } from "recoil";
 import styled from "styled-components";
-import { modalState } from "../../atoms/atoms";
+// import { modalState } from "../../atoms/atoms";
+import { useState } from "react";
 
 interface ModalProp {
   children: JSX.Element;
@@ -80,15 +81,14 @@ const StyledModal = styled.div`
 `;
 
 const Modal = ({ children }: ModalProp): JSX.Element => {
-  const setModal = useSetRecoilState(modalState);
-  const modalIsOpen = useRecoilValue(modalState);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   const closeModal = (event: React.MouseEvent<HTMLElement>) => {
-    if (event.target === event.currentTarget) setModal(false);
+    if (event.target === event.currentTarget) setModalIsOpen(false);
   };
 
   const toggleModal = () => {
-    setModal(!modalIsOpen);
+    setModalIsOpen(!modalIsOpen);
   };
 
   return (
