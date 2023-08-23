@@ -71,7 +71,7 @@ public class QuestionService {
 
         // page, size를 기반으로 PageRequest 객체를 내림차순으로 생성해서 페이지네이션 적용
         // PageRequest 페이지 번호와 페이지 크기를 나타내는 정보 값을 가짐 + 오름차순 정렬
-        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("questionId").ascending());
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("questionId").descending());
 
         // pageRequest를 이용해 등록된 답변 조회
         Page<Question> questionPage = questionRepository.findAll(pageRequest);

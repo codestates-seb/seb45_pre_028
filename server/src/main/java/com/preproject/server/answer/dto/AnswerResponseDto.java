@@ -32,6 +32,7 @@ public class AnswerResponseDto {
     private Long answerId;
     private Long questionId;
     private String content;
+    private String username;
     private LocalDateTime createdAt;  // 생성시간 응답
     private LocalDateTime modifiedAt;  // 수정시간 응답
 }
