@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { RecoilState } from "recoil";
-import { useFetch } from "./useFetch";
 
 export interface PaginationReturn {
   currentPage: number;
@@ -11,15 +9,9 @@ export interface PaginationReturn {
   onNextPageHandler: () => void;
 }
 
-export const usePagination = <T extends object>(
-  atom: RecoilState<T>,
-  pageSize: number,
-  data: string,
-): PaginationReturn => {
+export const usePagination = (): PaginationReturn => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-
-  const { fetchData } = useFetch(atom, `/${data}?page=${currentPage}&size=${pageSize}`);
 
   const onPageChangeHandler = (event: React.MouseEvent<HTMLButtonElement>, pageNumber: number) => {
     if (pageNumber === currentPage) {
@@ -27,21 +19,18 @@ export const usePagination = <T extends object>(
       return;
     }
     setCurrentPage(pageNumber);
-    fetchData();
   };
 
   const onPrevPageHandler = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
     }
-    fetchData();
   };
 
   const onNextPageHandler = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
     }
-    fetchData();
   };
 
   return {
