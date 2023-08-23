@@ -37,7 +37,8 @@ public interface AnswerMapper {
                 createdAt = answer.getCreatedAt();
                 modifiedAt = answer.getModifiedAt();
                 Long questionId = answer.getQuestion().getQuestionId();
-                AnswerResponseDto answerResponseDto = new AnswerResponseDto(answerId, (Long)questionId, content, createdAt, modifiedAt);
+                String username = answer.getMember().getName();
+                AnswerResponseDto answerResponseDto = new AnswerResponseDto(answerId, questionId, content, username, createdAt, modifiedAt);
                 return answerResponseDto;
             }
         }
