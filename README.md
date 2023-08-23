@@ -124,7 +124,7 @@ ANSWER_05, | 테이블 설명 | 답변 CRUD, 베스트 답변 채택  |
 | question_id | BIGINT | Y |  | Y | OneToMany |
 </div>
 </details>
-
+[API 명세서](https://documenter.getpostman.com/view/27566939/2s9Y5R1ksN)
 
 
 
