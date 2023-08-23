@@ -121,7 +121,7 @@ const Header = (): JSX.Element => {
     console.log(watch());
   };
 
-  const loggedIn = localStorage.getItem("accessToken");
+  const loggedIn = localStorage.getItem("access_token");
 
   return (
     <HeaderContainer>
@@ -157,7 +157,8 @@ const Header = (): JSX.Element => {
             <>
               <div
                 onClick={() => {
-                  navigate("/");
+                  const memberId = localStorage.getItem("member_id");
+                  navigate(`/member/${memberId}`);
                 }}
               >
                 <span>Profile</span>

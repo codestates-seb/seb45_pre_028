@@ -69,16 +69,20 @@ const QuestionList = () => {
     onPageChangeHandler,
     onPrevPageHandler,
     onNextPageHandler,
-  } = usePagination<Question>(questionsState, PAGE_SIZE, "question");
+  } = usePagination();
 
-  const { isLoading, isError, data } = useFetch<Question>(
+  const { fetchData, isLoading, isError, data } = useFetch<Question>(
     questionsState,
     `/question?page=${currentPage}&size=${PAGE_SIZE}`,
   );
 
   useEffect(() => {
     setTotalPages(data.pageInfo.totalPages);
-  }, []);
+  }, [data]);
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage]);
 
   const printState = (createdAt: string, modifiedAt: string): string => {
     return createdAt === modifiedAt ? "asked" : "modified";
@@ -109,7 +113,7 @@ const QuestionList = () => {
                 </h3>
                 <p className="summary">{question.content}</p>
                 <div className="user">
-                  <span className="id">{question.memberId}</span>
+                  <span className="id">{question.username}</span>
                   <span className="activity">
                     {printState(question.createdAt, question.modifiedAt)}
                   </span>

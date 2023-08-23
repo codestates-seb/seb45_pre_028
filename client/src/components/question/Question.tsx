@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { questionState } from "../../atoms/atoms";
 import { COMMON_CSS } from "../../constants/common_css";
@@ -108,6 +108,7 @@ const QuestionContainer = styled.div`
 const Question = () => {
   // const modalIsOpen = useRecoilValue<boolean>(modalState);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
   const { id } = useParams<string>();
   // const setModal = useSetRecoilState<boolean>(modalState);
   const [newContent, setNewContent] = useState<string>("");
@@ -148,6 +149,7 @@ const Question = () => {
       alert("권한이 없습니다.");
     } finally {
       toggleModal();
+      navigate("/");
     }
   };
   const patchHandler = async (questionId: number) => {
